@@ -1,0 +1,25 @@
+# ---------------------------------------------------------------- secrets --
+# Never commit these. If a key ever lands in a commit, rotate it immediately -
+# deleting the file does not remove it from git history.
+.env
+.env.*
+!.env.example
+.dev.vars
+*.pem
+*.key
+supabase/.temp/
+
+# ----------------------------------------------------------- dependencies --
+node_modules/
+
+# ---------------------------------------------------------- build output ---
+# copied from index.html by worker/build.mjs; regenerate with `npm run build`
+worker/public/
+.wrangler/
+
+# --------------------------------------------------------------- scratch ----
+_*.log
+_*.pid
+_site/
+.DS_Store
+Thumbs.db

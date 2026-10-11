@@ -1,0 +1,4336 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GameFix Hub - PC repairs, gaming components, custom PC building and upgrade planning. Get a free build plan, compatibility check and power-supply estimate before you buy.">
+  <meta name="theme-color" content="#070b14" media="(prefers-color-scheme:dark)">
+  <meta name="theme-color" content="#f5f7fc" media="(prefers-color-scheme:light)">
+  <meta name="author" content="GameFix Hub">
+  <title>GameFix Hub | PC Repairs, Gaming Parts &amp; Custom Builds</title>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="GameFix Hub">
+  <meta property="og:title" content="GameFix Hub | PC Repairs, Gaming Parts &amp; Custom Builds">
+  <meta property="og:description" content="Plan a compatible gaming PC, check your parts, estimate PSU wattage and request repair help - all in one place.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1220'/%3E%3Cpath d='M20 24h24v10a12 12 0 0 1-12 12 12 12 0 0 1-12-12V24Z' fill='none' stroke='%2322d3ee' stroke-width='4'/%3E%3Ccircle cx='26' cy='32' r='3' fill='%237c5cff'/%3E%3Ccircle cx='38' cy='32' r='3' fill='%237c5cff'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- EDIT: update the URL and area served once the site has a real domain -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "GameFix Hub",
+    "description": "PC repair, gaming component advice, custom PC building and upgrade planning.",
+    "email": "meshackosei50@gmail.com",
+    "telephone": "+34 614 268 211",
+    "priceRange": "\u20ac\u20ac",
+    "areaServed": { "@type": "Country", "name": "Spain" },
+    "knowsAbout": [
+      "PC repair",
+      "Gaming PC building",
+      "Component compatibility",
+      "PC upgrades"
+    ],
+    "makesOffer": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "PC diagnostics and repair" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Overheating and cooling service" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Performance upgrade planning" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Windows and driver support" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom PC building and compatibility checks" } }
+    ]
+  }
+  </script>
+
+  <style>
+    /* ============================================================
+       1. DESIGN TOKENS
+       ============================================================ */
+    :root {
+      --bg: #070b14;
+      --bg-soft: #0b1220;
+      --panel: #0f172a;
+      --panel-2: #131f36;
+      --line: #1f2f4a;
+      --line-strong: #2d4266;
+      --text: #eef3fb;
+      --muted: #9fb0c9;
+      --accent: #22d3ee;
+      --accent-2: #7c5cff;
+      --accent-3: #2563eb;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --bad: #f87171;
+      --glow: 0 0 0 1px rgba(34, 211, 238, .25), 0 18px 45px -22px rgba(34, 211, 238, .55);
+      --shadow: 0 24px 60px -28px rgba(0, 0, 0, .9);
+      --radius-sm: 10px;
+      --radius: 16px;
+      --radius-lg: 24px;
+      --header-h: 68px;
+      --font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      --font-display: "Sora", "Inter", "Segoe UI", system-ui, sans-serif;
+    }
+
+    html[data-theme="light"] {
+      --bg: #f5f7fc;
+      --bg-soft: #eaeff8;
+      --panel: #ffffff;
+      --panel-2: #f1f5fb;
+      --line: #dde5f1;
+      --line-strong: #c3d0e5;
+      --text: #0b1220;
+      --muted: #5a6b85;
+      --accent: #0891b2;
+      --accent-2: #6d28d9;
+      --accent-3: #1d4ed8;
+      --ok: #059669;
+      --warn: #b45309;
+      --bad: #dc2626;
+      --glow: 0 0 0 1px rgba(8, 145, 178, .25), 0 20px 40px -26px rgba(15, 23, 42, .45);
+      --shadow: 0 20px 46px -28px rgba(15, 23, 42, .45);
+    }
+
+    /* ============================================================
+       2. BASE
+       ============================================================ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* the hidden attribute must beat component display rules (flex/grid) */
+    [hidden] { display: none !important; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+      transition: background .3s ease, color .3s ease;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+
+    a { color: inherit; }
+
+    img, svg { display: block; max-width: 100%; }
+
+    ::selection { background: var(--accent); color: #04121a; }
+
+    :focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 50%;
+      top: -70px;
+      transform: translateX(-50%);
+      z-index: 200;
+      background: var(--accent);
+      color: #04121a;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 0 0 12px 12px;
+      text-decoration: none;
+      transition: top .2s ease;
+    }
+
+    .skip-link:focus { top: 0; }
+
+    .wrap {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 5%;
+    }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      z-index: 120;
+      transition: width .1s linear;
+    }
+
+    /* ============================================================
+       ICON SYSTEM - Lucide 1.55 (ISC licence), inlined as an SVG
+       sprite so the site keeps zero runtime dependencies.
+       ============================================================ */
+    .icon-sprite {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: middle;
+    }
+
+    /* optical stroke compensation: thinner strokes look right when scaled up */
+    .icon-sm { width: 16px; height: 16px; stroke-width: 2.25; }
+    .icon-lg { width: 26px; height: 26px; stroke-width: 1.6; }
+    .icon-inline { display: inline-block; vertical-align: -.16em; }
+
+    /* ============================================================
+       3. HEADER / NAV
+       ============================================================ */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .site-header.is-stuck {
+      border-bottom-color: var(--line);
+      box-shadow: 0 12px 30px -24px rgba(0, 0, 0, .9);
+    }
+
+    .header-inner {
+      min-height: var(--header-h);
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(140deg, var(--accent-3), var(--accent-2));
+      box-shadow: var(--glow);
+      flex: none;
+    }
+
+    .logo-mark svg { width: 20px; height: 20px; }
+    .logo span { color: var(--accent); }
+
+    .logo small {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 10px;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .nav {
+      display: flex;
+      gap: 2px;
+      margin-left: auto;
+    }
+
+    .nav a {
+      position: relative;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14.5px;
+      font-weight: 500;
+      padding: 9px 12px;
+      border-radius: 10px;
+      transition: color .2s ease, background .2s ease;
+    }
+
+    .nav a:hover { color: var(--text); background: var(--panel-2); }
+    .nav a.is-active { color: var(--text); }
+
+    .nav a.is-active::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 3px;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 8px;
+    }
+
+    .icon-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color .2s ease, transform .2s ease;
+    }
+
+    .icon-btn:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+    .icon-btn .icon { width: 18px; height: 18px; stroke-width: 2; }
+    .nav-toggle { display: none; }
+
+    .badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      border-radius: 10px;
+      background: var(--accent-2);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--bg);
+    }
+
+    .badge[data-empty="true"] { display: none; }
+
+    /* ============================================================
+       4. BUTTONS / PILLS / TAGS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 20px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    /* button icons are a fixed 17px so every control lines up */
+    .btn .icon { width: 17px; height: 17px; stroke-width: 2.1; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+      color: #fff;
+      box-shadow: 0 16px 34px -20px rgba(37, 99, 235, .95);
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 22px 40px -18px rgba(37, 99, 235, .95); }
+
+    .btn-ghost {
+      background: var(--panel);
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .btn-accent {
+      background: rgba(34, 211, 238, .12);
+      border-color: rgba(34, 211, 238, .45);
+      color: var(--accent);
+    }
+
+    .btn-accent:hover { background: rgba(34, 211, 238, .2); transform: translateY(-2px); }
+
+    .btn-sm { padding: 10px 14px; font-size: 14px; border-radius: 10px; }
+    .btn-block { width: 100%; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .pill .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 4px rgba(52, 211, 153, .18);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .chip:hover { color: var(--text); border-color: var(--line-strong); }
+
+    .chip[aria-pressed="true"] {
+      background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .tag.is-ok { color: var(--ok); border-color: rgba(52, 211, 153, .45); background: rgba(52, 211, 153, .1); }
+    .tag.is-warn { color: var(--warn); border-color: rgba(251, 191, 36, .45); background: rgba(251, 191, 36, .1); }
+    .tag.is-bad { color: var(--bad); border-color: rgba(248, 113, 113, .45); background: rgba(248, 113, 113, .1); }
+
+    /* ============================================================
+       5. SECTIONS
+       ============================================================ */
+    main { display: block; }
+
+    section {
+      padding: 84px 0;
+      position: relative;
+      scroll-margin-top: calc(var(--header-h) + 12px);
+    }
+
+    section.alt { background: var(--bg-soft); border-block: 1px solid var(--line); }
+
+    .section-head { max-width: 760px; margin: 0 auto 42px; text-align: center; }
+
+    .section-head h2 {
+      font-size: clamp(27px, 3.6vw, 40px);
+      margin: 14px 0 10px;
+    }
+
+    .section-head h2 em {
+      font-style: normal;
+      background: linear-gradient(100deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .section-head p { color: var(--muted); font-size: 16.5px; }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+
+    /* ============================================================
+       6. HERO
+       ============================================================ */
+    .hero {
+      padding: 74px 0 84px;
+      overflow: hidden;
+      scroll-margin-top: 0;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: .5;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero::before {
+      width: 460px;
+      height: 460px;
+      top: -170px;
+      left: -120px;
+      background: radial-gradient(circle, rgba(37, 99, 235, .55), transparent 70%);
+      animation: float 16s ease-in-out infinite;
+    }
+
+    .hero::after {
+      width: 420px;
+      height: 420px;
+      bottom: -190px;
+      right: -110px;
+      background: radial-gradient(circle, rgba(124, 92, 255, .45), transparent 70%);
+      animation: float 20s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(26px, 30px, 0); }
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 52px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 5.2vw, 62px);
+      margin: 18px 0 16px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(100deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-lead { color: var(--muted); font-size: 17.5px; max-width: 560px; }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 26px;
+      margin-top: 34px;
+      padding-top: 26px;
+      border-top: 1px dashed var(--line);
+    }
+
+    .hero-stat { display: flex; gap: 11px; align-items: flex-start; }
+
+    .hero-stat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      flex: none;
+    }
+
+    .hero-stats div strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--text);
+    }
+
+    .hero-stats div span { color: var(--muted); font-size: 13px; }
+
+    .console {
+      position: relative;
+      background: linear-gradient(160deg, var(--panel), var(--bg-soft));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .console::after {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: .7;
+    }
+
+    .console-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .console-title {
+      font-size: 13px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .console-total {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(100deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .console-rows { display: grid; gap: 9px; }
+
+    .console-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 13px;
+      font-size: 14px;
+    }
+
+    .console-row b {
+      width: 62px;
+      flex: none;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .console-row span { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .console-foot {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .meter { height: 6px; border-radius: 999px; background: var(--panel-2); overflow: hidden; border: 1px solid var(--line); }
+
+    .meter i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width .5s ease;
+    }
+
+    /* ============================================================
+       7. CARDS
+       ============================================================ */
+    .card {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s ease;
+    }
+
+    .card:hover { transform: translateY(-6px); border-color: var(--line-strong); box-shadow: var(--shadow); }
+    .card:hover::after { transform: scaleX(1); }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      background: linear-gradient(140deg, rgba(34, 211, 238, .16), rgba(124, 92, 255, .16));
+      border: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+
+    .card h3 { font-size: 18.5px; margin-bottom: 8px; }
+    .card p { color: var(--muted); font-size: 14.5px; }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 14px 0 16px;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .card-meta span { display: inline-flex; align-items: center; gap: 6px; }
+
+    .card > .btn { margin-top: auto; }
+
+    /* ============================================================
+       8. CONFIGURATOR
+       ============================================================ */
+    .config {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .field { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 7px;
+      color: var(--text);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      font: inherit;
+      font-size: 15px;
+      color: var(--text);
+      background: var(--bg-soft);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-sm);
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    input::placeholder,
+    textarea::placeholder { color: color-mix(in srgb, var(--muted) 80%, transparent); }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(34, 211, 238, .14);
+    }
+
+    select {
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+      background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      padding-right: 40px;
+    }
+
+    textarea { min-height: 128px; resize: vertical; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      padding: 0;
+      height: 26px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-3), var(--accent-2));
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      margin-top: -8px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid var(--accent-2);
+      box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .8);
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-3), var(--accent-2));
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid var(--accent-2);
+    }
+
+    .slider-readout {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .slider-readout output {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .hint { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+    .build-list { display: grid; gap: 10px; }
+
+    .build-row {
+      display: grid;
+      grid-template-columns: 96px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .build-row > b {
+      font-size: 11px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .build-row .part-name { font-size: 14.5px; font-weight: 600; }
+    .build-row .part-sub { font-size: 12.5px; color: var(--muted); }
+
+    .build-row .part-cost {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .build-row a.mini {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .build-row a.mini:hover { text-decoration: underline; }
+
+    .summary-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(37, 99, 235, .16), rgba(124, 92, 255, .14));
+    }
+
+    .summary-bar .big { font-family: var(--font-display); font-size: 30px; font-weight: 800; }
+
+    .notes {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 13.5px;
+      color: var(--muted);
+    }
+
+    .notes li { display: flex; gap: 9px; align-items: flex-start; }
+
+    .notes .icon {
+      margin-top: 2px;
+      color: var(--accent);
+    }
+
+    .notes li span { flex: 1; }
+
+    .notice {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--warn);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 13.5px;
+      margin-bottom: 24px;
+    }
+
+    /* ============================================================
+       9. PARTS CATALOGUE
+       ============================================================ */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .search { position: relative; flex: 1 1 260px; min-width: 200px; }
+
+    .search .icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .search input { padding-left: 40px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .part-card .price-range {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .part-card .price-note { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+    .part-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: auto; }
+    .part-actions .btn { white-space: nowrap; }
+
+    .save-btn { padding: 12px 14px; white-space: nowrap; }
+    .save-btn.is-saved { color: var(--bad); border-color: rgba(248, 113, 113, .5); }
+    .save-btn.is-saved .icon { fill: currentColor; }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius);
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+
+    /* ============================================================
+       10. COMPATIBILITY CHECKER
+       ============================================================ */
+    .checker { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
+
+    .verdict { display: grid; gap: 12px; }
+
+    .verdict-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 13px 15px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      font-size: 14px;
+    }
+
+    .verdict-row strong { display: block; font-size: 14.5px; }
+    .verdict-row p { color: var(--muted); font-size: 13px; }
+    .verdict-row .tag { flex: none; }
+
+    /* ============================================================
+       11. STEPS / FAQ
+       ============================================================ */
+    .steps {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      counter-reset: step;
+    }
+
+    .step {
+      position: relative;
+      padding: 24px 20px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: "0" counter(step);
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 800;
+      color: transparent;
+      -webkit-text-stroke: 1.4px var(--line-strong);
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .step h3 { font-size: 17px; margin-bottom: 6px; }
+    .step p { color: var(--muted); font-size: 14px; }
+
+    .step-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+
+    .faq { display: grid; gap: 12px; max-width: 860px; margin: 0 auto; }
+
+    .faq details {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 4px 18px;
+      transition: border-color .2s ease;
+    }
+
+    .faq details[open] { border-color: var(--line-strong); }
+
+    .faq summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 15px 30px 15px 0;
+      font-weight: 600;
+      font-size: 15.5px;
+      position: relative;
+    }
+
+    .faq summary::-webkit-details-marker { display: none; }
+
+    .faq-chevron {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      transition: transform .25s ease;
+    }
+
+    .faq details[open] .faq-chevron { transform: translateY(-50%) rotate(180deg); }
+
+    .faq .answer { color: var(--muted); font-size: 14.5px; padding: 0 0 18px; }
+
+    /* ============================================================
+       12. FORM
+       ============================================================ */
+    .booking-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 24px; align-items: start; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+    .form-grid .span-2 { grid-column: 1 / -1; }
+
+    .error-text { display: none; color: var(--bad); font-size: 12.5px; margin-top: 5px; font-weight: 600; }
+
+    input[aria-invalid="true"],
+    select[aria-invalid="true"],
+    textarea[aria-invalid="true"] {
+      border-color: var(--bad);
+      box-shadow: 0 0 0 4px rgba(248, 113, 113, .13);
+    }
+
+    .field.has-error .error-text { display: block; }
+
+    .form-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+    .contact-list { display: grid; gap: 12px; margin-top: 20px; }
+
+    .contact-item {
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+    }
+
+    .contact-item .ico {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      background: rgba(34, 211, 238, .13);
+      border: 1px solid var(--line);
+      flex: none;
+    }
+
+    .contact-item b { display: block; font-size: 14px; }
+    .contact-item a,
+    .contact-item span { color: var(--muted); font-size: 13.5px; text-decoration: none; }
+    .contact-item a:hover { color: var(--accent); }
+
+    .status-box {
+      display: none;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(52, 211, 153, .45);
+      background: rgba(52, 211, 153, .1);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .status-box.is-visible { display: block; }
+
+    .status-box.is-error {
+      border-color: rgba(248, 113, 113, .45);
+      background: rgba(248, 113, 113, .1);
+    }
+
+    .status-box.is-busy {
+      border-color: rgba(34, 211, 238, .45);
+      background: rgba(34, 211, 238, .1);
+    }
+
+    /* Honeypot: positioned off-canvas rather than display:none, because some
+       bots skip fields that are hidden outright. Real visitors never see it. */
+    .honeypot {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .receipt {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(34, 211, 238, .4);
+      background: linear-gradient(180deg, rgba(34, 211, 238, .12), transparent);
+    }
+
+    .receipt[hidden] { display: none; }
+
+    .receipt-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .receipt-ref {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: var(--accent);
+      word-break: break-all;
+    }
+
+    .receipt-meta { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+    .ledger { margin-top: 12px; display: grid; gap: 8px; }
+
+    .ledger-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 13.5px;
+    }
+
+    .ledger-row b {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      letter-spacing: .03em;
+    }
+
+    /* ---------------- accounts ---------------- */
+
+    .auth-form { display: grid; gap: 6px; margin-top: 14px; }
+
+    .auth-form label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--input-bg, rgba(255, 255, 255, .04));
+      color: var(--text);
+      font: inherit;
+    }
+
+    .auth-form input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .03);
+    }
+
+    .tab {
+      flex: 1 1 0;
+      padding: 9px 10px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .tab[aria-selected="true"] {
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #04121a;
+    }
+
+    .link-btn {
+      justify-self: start;
+      margin-top: 12px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--accent);
+      font: inherit;
+      font-size: 13.5px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .auth-msg {
+      margin-top: 14px;
+      padding: 11px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 13.5px;
+      background: rgba(255, 255, 255, .03);
+    }
+
+    .auth-msg[hidden] { display: none; }
+    .auth-msg.is-error { border-color: rgba(248, 113, 113, .5); background: rgba(248, 113, 113, .1); }
+    .auth-msg.is-ok { border-color: rgba(52, 211, 153, .45); background: rgba(52, 211, 153, .1); }
+    .auth-msg.is-warn { border-color: rgba(251, 191, 36, .5); background: rgba(251, 191, 36, .1); }
+
+    .account-identity {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .03);
+    }
+
+    .account-identity b { display: block; font-size: 14.5px; word-break: break-all; }
+
+    .account-identity .ico {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-3, #0ea5e9), var(--accent-2));
+      color: #fff;
+    }
+
+    .mini-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 20px 0 0;
+    }
+
+    .mini-head strong { font-size: 14px; }
+
+    .request-row {
+      display: grid;
+      gap: 4px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: rgba(255, 255, 255, .02);
+    }
+
+    .request-row .ref {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .request-row .meta { color: var(--muted); font-size: 12.5px; }
+    .request-row .body { color: var(--text); font-size: 13.5px; }
+
+    .pill-status {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--muted);
+    }
+
+    .pill-status.is-won { border-color: rgba(52, 211, 153, .5); color: #6ee7b7; }
+    .pill-status.is-new { border-color: rgba(34, 211, 238, .5); color: var(--accent); }
+
+    @media print {
+      .honeypot, .receipt, #accountPanel { display: none !important; }
+    }
+
+    /* ============================================================
+       13. FOOTER / DRAWER / TOASTS
+       ============================================================ */
+    footer {
+      border-top: 1px solid var(--line);
+      background: var(--bg-soft);
+      padding: 54px 0 26px;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 26px; }
+
+    .foot-grid h4 { color: var(--text); font-size: 14px; margin-bottom: 12px; }
+    .foot-grid ul { list-style: none; display: grid; gap: 8px; }
+    .foot-grid a { text-decoration: none; }
+    .foot-grid a:hover { color: var(--accent); }
+
+    .foot-bottom {
+      margin-top: 34px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      font-size: 12.5px;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(400px, 92vw);
+      background: var(--panel);
+      border-left: 1px solid var(--line);
+      box-shadow: -30px 0 60px -30px rgba(0, 0, 0, .9);
+      z-index: 140;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(102%);
+      transition: transform .3s cubic-bezier(.22, 1, .36, 1);
+      visibility: hidden;
+    }
+
+    .drawer.is-open { transform: translateX(0); visibility: visible; }
+
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .drawer-body { padding: 18px; overflow-y: auto; display: grid; gap: 10px; align-content: start; flex: 1; }
+    .drawer-foot { padding: 16px 18px; border-top: 1px solid var(--line); display: grid; gap: 10px; }
+
+    .saved-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 13px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      font-size: 14px;
+    }
+
+    .saved-item b { display: block; font-size: 14px; }
+    .saved-item span { color: var(--muted); font-size: 12.5px; }
+
+    .saved-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      background: rgba(34, 211, 238, .12);
+      border: 1px solid var(--line);
+      flex: none;
+    }
+
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, .6);
+      backdrop-filter: blur(2px);
+      z-index: 130;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+
+    .backdrop.is-open { opacity: 1; visibility: visible; }
+
+    .toasts {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 160;
+      display: grid;
+      gap: 10px;
+      max-width: min(360px, 90vw);
+    }
+
+    .toast {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      border-radius: 12px;
+      padding: 13px 15px;
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      animation: toast-in .28s ease both;
+    }
+
+    .toast.is-ok { border-left-color: var(--ok); }
+    .toast.is-warn { border-left-color: var(--warn); }
+    .toast.is-out { animation: toast-out .25s ease both; }
+
+    .toast .icon { margin-top: 2px; color: var(--accent); }
+    .toast.is-ok .icon { color: var(--ok); }
+    .toast.is-warn .icon { color: var(--warn); }
+    .toast span { flex: 1; }
+
+    @keyframes toast-in { from { opacity: 0; transform: translateY(12px) scale(.97); } }
+    @keyframes toast-out { to { opacity: 0; transform: translateY(8px) scale(.98); } }
+
+    .to-top {
+      position: fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index: 120;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .to-top:hover { transform: translateY(-3px); border-color: var(--accent); }
+
+    /* ============================================================
+       14. REVEAL + MOTION
+       ============================================================ */
+    /* Reveal is progressive enhancement: the hidden state only exists once JS
+       adds .js-reveal, so blocked/slow JS never leaves content invisible. */
+    .reveal {
+      transition: opacity .6s cubic-bezier(.22, 1, .36, 1), transform .6s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .reveal.js-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    .reveal.is-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+      .reveal.js-reveal { opacity: 1; transform: none; }
+    }
+
+    /* ============================================================
+       15. RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1080px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 38px; }
+      .config,
+      .checker,
+      .booking-grid { grid-template-columns: 1fr; }
+      .foot-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .nav-toggle { display: grid; }
+      .header-inner { position: relative; }
+
+      .nav {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 5%;
+        right: 5%;
+        flex-direction: column;
+        gap: 4px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 10px;
+        box-shadow: var(--shadow);
+        display: none;
+      }
+
+      .nav.is-open { display: flex; }
+      .nav a { padding: 12px 14px; font-size: 15px; }
+      .nav a.is-active::after { display: none; }
+      .hide-sm { display: none !important; }
+    }
+
+    @media (max-width: 620px) {
+      section { padding: 64px 0; }
+      .hero { padding: 52px 0 64px; }
+
+      /* keep the header inside the viewport on small phones */
+      .header-inner { gap: 10px; }
+      .logo { font-size: 18px; }
+      .logo small { display: none; }
+      .logo-mark { width: 30px; height: 30px; }
+      .header-actions { gap: 6px; margin-left: 4px; }
+      .icon-btn { width: 38px; height: 38px; }
+
+      .form-grid { grid-template-columns: 1fr; }
+      .build-row { grid-template-columns: 1fr auto; }
+      .build-row > b { grid-column: 1 / -1; }
+      .foot-grid { grid-template-columns: 1fr; }
+      .toasts { right: 12px; left: 12px; bottom: 78px; }
+      .hero-stats { gap: 18px; }
+    }
+
+    /* ============================================================
+       16. PRINT (plan / quote sheet)
+       ============================================================ */
+    #printArea { display: none; }
+
+    @media print {
+      .site-header,
+      main,
+      footer,
+      .drawer,
+      .backdrop,
+      .toasts,
+      .to-top,
+      .progress,
+      .skip-link { display: none !important; }
+
+      body { background: #fff; color: #000; }
+
+      /* a printed page must never contain blank, un-revealed sections */
+      .reveal,
+      .reveal.js-reveal { opacity: 1 !important; transform: none !important; }
+
+      #printArea {
+        display: block !important;
+        padding: 24px;
+        font-family: "Inter", Arial, sans-serif;
+      }
+
+      #printArea h1 { font-size: 20px; margin-bottom: 4px; }
+      #printArea .sheet-meta { font-size: 12px; color: #444; margin-bottom: 18px; }
+
+      #printArea pre {
+        white-space: pre-wrap;
+        font-family: ui-monospace, "Consolas", monospace;
+        font-size: 12px;
+        line-height: 1.6;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+    <!-- Icon set: Lucide v1.55.0 (https://lucide.dev) - ISC licence, inlined so the
+       site has no icon-font or CDN dependency. Regenerate from the package if needed. -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /></symbol>
+    <symbol id="i-thermometer-sun" viewBox="0 0 24 24"><path d="M12 2v2" /><path d="M12 8a4 4 0 0 0-1.645 7.647" /><path d="M2 12h2" /><path d="M20 14.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z" /><path d="m4.93 4.93 1.41 1.41" /><path d="m6.34 17.66-1.41 1.41" /></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4" /><path d="M3.34 19a10 10 0 1 1 17.32 0" /></symbol>
+    <symbol id="i-monitor-cog" viewBox="0 0 24 24"><path d="M12 17v4" /><path d="m14.305 7.53.923-.382" /><path d="m15.228 4.852-.923-.383" /><path d="m16.852 3.228-.383-.924" /><path d="m16.852 8.772-.383.923" /><path d="m19.148 3.228.383-.924" /><path d="m19.53 9.696-.382-.924" /><path d="m20.772 4.852.924-.383" /><path d="m20.772 7.148.924.383" /><path d="M22 13v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7" /><path d="M8 21h8" /><circle cx="18" cy="6" r="3" /></symbol>
+    <symbol id="i-gpu" viewBox="0 0 24 24"><path d="M2 17h18a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H2" /><path d="M2 21V3" /><path d="M7 17v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3" /><circle cx="16" cy="11" r="2" /><circle cx="8" cy="11" r="2" /></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><path d="M12 20v2" /><path d="M12 2v2" /><path d="M17 20v2" /><path d="M17 2v2" /><path d="M2 12h2" /><path d="M2 17h2" /><path d="M2 7h2" /><path d="M20 12h2" /><path d="M20 17h2" /><path d="M20 7h2" /><path d="M7 20v2" /><path d="M7 2v2" /><rect x="4" y="4" width="16" height="16" rx="2" /><rect x="8" y="8" width="8" height="8" rx="1" /></symbol>
+    <symbol id="i-circuit-board" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M11 9h4a2 2 0 0 0 2-2V3" /><circle cx="9" cy="9" r="2" /><path d="M7 21v-4a2 2 0 0 1 2-2h4" /><circle cx="15" cy="15" r="2" /></symbol>
+    <symbol id="i-memory-stick" viewBox="0 0 24 24"><path d="M12 12v-2" /><path d="M12 18v-2" /><path d="M16 12v-2" /><path d="M16 18v-2" /><path d="M2 11h1.5" /><path d="M20 18v-2" /><path d="M20.5 11H22" /><path d="M4 18v-2" /><path d="M8 12v-2" /><path d="M8 18v-2" /><rect x="2" y="6" width="20" height="10" rx="2" /></symbol>
+    <symbol id="i-hard-drive" viewBox="0 0 24 24"><path d="M10 16h.01" /><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /><path d="M21.946 12.013H2.054" /><path d="M6 16h.01" /></symbol>
+    <symbol id="i-plug-zap" viewBox="0 0 24 24"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z" /><path d="m2 22 3-3" /><path d="M7.5 13.5 10 11" /><path d="M10.5 16.5 13 14" /><path d="m18 3-4 4h6l-4 4" /></symbol>
+    <symbol id="i-pc-case" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" /><path d="M15 14h.01" /><path d="M9 6h6" /><path d="M9 10h6" /></symbol>
+    <symbol id="i-fan" viewBox="0 0 24 24"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /><rect x="2" y="4" width="20" height="16" rx="2" /></symbol>
+    <symbol id="i-message-circle" viewBox="0 0 24 24"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></symbol>
+    <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 5h16" /><path d="M4 12h16" /><path d="M4 19h16" /></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></symbol>
+    <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10" /><path d="M7 17 17 7" /></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></symbol>
+    <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /><path d="m21.854 2.147-10.94 10.939" /></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" /><rect x="6" y="14" width="12" height="8" rx="1" /></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></symbol>
+    <symbol id="i-log-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /></symbol>
+    <symbol id="i-key-round" viewBox="0 0 24 24"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" /><circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /></symbol>
+    <symbol id="i-circle-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="m16 9-5.5 5.5L8 12" /></symbol>
+    <symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></symbol>
+    <symbol id="i-banknote" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2" /><circle cx="12" cy="12" r="2" /><path d="M6 12h.01M18 12h.01" /></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M12 7v14" /><path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" /><path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5" /><rect x="3" y="7" width="18" height="4" rx="1" /></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /></symbol>
+    <symbol id="i-messages-square" viewBox="0 0 24 24"><path d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" /><path d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1" /></symbol>
+    <symbol id="i-clipboard-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></symbol>
+    <symbol id="i-handshake" viewBox="0 0 24 24"><path d="m11 17 2 2a1 1 0 1 0 3-3" /><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" /><path d="m21 3 1 11h-2" /><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" /><path d="M3 4h8" /></symbol>
+    <symbol id="i-wand-sparkles" viewBox="0 0 24 24"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72" /><path d="m14 7 3 3" /><path d="M5 6v4" /><path d="M19 14v4" /><path d="M10 2v2" /><path d="M7 8H3" /><path d="M21 16h-4" /><path d="M11 3H9" /></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" id="progressBar" aria-hidden="true"></div>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+      <a class="logo" href="#home" aria-label="GameFix Hub home">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round">
+            <rect x="3" y="5" width="18" height="11" rx="3"></rect>
+            <path d="M9 20h6M12 16v4"></path>
+          </svg>
+        </span>
+        <span>Game<span>Fix</span> Hub<small>Repairs · Builds · Upgrades</small></span>
+      </a>
+
+      <nav class="nav" id="primaryNav" aria-label="Main navigation">
+        <a href="#services">Repairs</a>
+        <a href="#configurator">Build a PC</a>
+        <a href="#parts">Parts</a>
+        <a href="#compatibility">Compatibility</a>
+        <a href="#faq">FAQ</a>
+        <a href="#booking">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="savedToggle" type="button" aria-label="Open saved parts list" aria-expanded="false" aria-controls="savedPanel">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg>
+          <span class="badge" id="savedCount" data-empty="true">0</span>
+        </button>
+
+        <button class="icon-btn" id="accountToggle" type="button" aria-label="Your account" aria-expanded="false" aria-controls="accountPanel">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg>
+          <span class="badge" id="accountBadge" data-empty="true" hidden>0</span>
+        </button>
+
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch colour theme">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sun"></use></svg>
+        </button>
+
+        <a class="btn btn-primary btn-sm hide-sm" href="#booking" data-service="PC Repair">Get a quote</a>
+
+        <button class="icon-btn nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-menu"></use></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="home">
+      <div class="wrap hero-grid">
+        <div class="reveal">
+          <span class="pill"><span class="dot"></span> PC repairs · Gaming parts · Custom builds</span>
+
+          <h1>Fix it, build it, <em>then dominate</em>.</h1>
+
+          <p class="hero-lead">
+            Diagnose PC problems, plan a balanced upgrade, verify part compatibility and
+            get a realistic build plan for your budget — before you spend a single euro.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#configurator">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-wand-sparkles"></use></svg>
+              Build my PC
+            </a>
+            <a class="btn btn-ghost" href="#booking">Request repair help</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-icon"><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-gift"></use></svg></span>
+              <div><strong>Free</strong><span>Build plan &amp; compatibility check</span></div>
+            </div>
+
+            <div class="hero-stat">
+              <span class="hero-stat-icon"><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-layers"></use></svg></span>
+              <div><strong>8</strong><span>Component categories covered</span></div>
+            </div>
+
+            <div class="hero-stat">
+              <span class="hero-stat-icon"><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-messages-square"></use></svg></span>
+              <div><strong>Send it your way</strong><span>Straight to my inbox, or by email and WhatsApp</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="console reveal" role="group" aria-label="Live build plan preview">
+          <div class="console-head">
+            <div>
+              <div class="console-title">Live build plan</div>
+              <div class="hint" id="consoleTarget" style="margin-top:4px">1440p AAA gaming · €1200 budget</div>
+            </div>
+            <div class="console-total" id="consoleTotal">€0</div>
+          </div>
+
+          <div class="console-rows" id="consoleRows"></div>
+
+          <div style="margin-top:16px">
+            <div class="hint" style="display:flex;justify-content:space-between;margin-bottom:8px">
+              <span>Budget used</span>
+              <span id="consoleUsed">0%</span>
+            </div>
+            <div class="meter"><i id="consoleMeter" style="width:0%"></i></div>
+          </div>
+
+          <div class="console-foot">
+            <span>Estimates only — confirm live prices before buying.</span>
+            <a class="btn btn-accent btn-sm" href="#configurator">Adjust</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SERVICES ================= -->
+    <section id="services" class="alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="pill">Services</span>
+          <h2>PC repair &amp; <em>upgrade services</em></h2>
+          <p>Send the details of your machine and the problem. You get a clear direction on what to check, what to replace and what it is likely to cost.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg class="icon icon-lg" focusable="false"><use href="#i-wrench"></use></svg>
+            </div>
+            <h3>Diagnostics &amp; Repair</h3>
+            <p>Crashes, blue screens, random shutdowns, boot failures, no display, slow performance and strange noises.</p>
+            <div class="card-meta">
+              <span><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg>Est. from €30</span>
+              <span><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>Same-day reply</span>
+            </div>
+            <button class="btn btn-primary" type="button" data-service="PC Repair">Request this</button>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg class="icon icon-lg" focusable="false"><use href="#i-thermometer-sun"></use></svg>
+            </div>
+            <h3>Overheating &amp; Cooling</h3>
+            <p>Thermal checks, fan curves, dust cleanup, airflow layout, cooler replacement and repaste recommendations.</p>
+            <div class="card-meta">
+              <span><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg>Est. from €35</span>
+              <span><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-fan"></use></svg>Thermal + airflow review</span>
+            </div>
+            <button class="btn btn-primary" type="button" data-service="Overheating / Cooling">Request this</button>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg class="icon icon-lg" focusable="false"><use href="#i-gauge"></use></svg>
+            </div>
+            <h3>Performance Upgrades</h3>
+            <p>RAM, NVMe, CPU or GPU upgrades chosen around your motherboard, PSU and actual workload.</p>
+            <div class="card-meta">
+              <span><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg>Est. from €25</span>
+              <span><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-gauge"></use></svg>Upgrade-first advice</span>
+            </div>
+            <button class="btn btn-primary" type="button" data-service="Performance Upgrade">Plan an upgrade</button>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">
+              <svg class="icon icon-lg" focusable="false"><use href="#i-monitor-cog"></use></svg>
+            </div>
+            <h3>Windows, Drivers &amp; Software</h3>
+            <p>Clean installs, driver conflicts, update loops, storage health, backup planning and startup optimisation.</p>
+            <div class="card-meta">
+              <span><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-banknote"></use></svg>Est. from €25</span>
+              <span><svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-monitor-cog"></use></svg>Step-by-step help</span>
+            </div>
+            <button class="btn btn-primary" type="button" data-service="Windows / Drivers">Request this</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONFIGURATOR ================= -->
+    <section id="configurator">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="pill">Build planner</span>
+          <h2>Configure your build in <em>10 seconds</em></h2>
+          <p>Pick a budget and a goal. The planner balances GPU, CPU, memory, storage and power supply, then flags what to double-check before you order.</p>
+        </div>
+
+        <div class="config">
+          <div class="panel reveal">
+            <div class="field">
+              <div class="slider-readout">
+                <label for="budgetRange">Parts budget</label>
+                <output id="budgetOut" for="budgetRange">€1200</output>
+              </div>
+              <input type="range" id="budgetRange" min="400" max="3500" step="50" value="1200" aria-describedby="budgetHint">
+              <p class="hint" id="budgetHint">Drag to change. Figures are typical retail planning estimates for Spain.</p>
+            </div>
+
+            <div class="field">
+              <label for="useCase">What is the PC mainly for?</label>
+              <select id="useCase">
+                <option value="esports1080">Competitive gaming · 1080p high FPS</option>
+                <option value="aaa1440" selected>AAA gaming · 1440p high settings</option>
+                <option value="aaa4k">4K gaming · maximum settings</option>
+                <option value="creator">Creating / streaming / editing</option>
+                <option value="everyday">Everyday + light gaming</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="profile">Priority</label>
+              <select id="profile">
+                <option value="balanced" selected>Balanced performance</option>
+                <option value="quiet">Quieter operation</option>
+                <option value="storage">More storage space</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary btn-block" type="button" id="buildBtn">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sparkles"></use></svg>
+              Generate build plan
+            </button>
+
+            <p class="hint">Everything runs in your browser. Nothing is uploaded.</p>
+          </div>
+
+          <div class="panel reveal">
+            <div class="notice">
+              <svg class="icon icon-sm icon-inline" aria-hidden="true" focusable="false"><use href="#i-triangle-alert"></use></svg>
+              <strong>Planning estimates, not live prices.</strong>
+              Figures are realistic Spanish retail ranges to help you compare options. Component prices and stock change constantly — always confirm on the seller page before ordering.
+            </div>
+
+            <div class="build-list" id="buildList" aria-live="polite"></div>
+
+            <div class="summary-bar">
+              <div>
+                <div class="console-title">Estimated parts total</div>
+                <div class="big" id="buildTotal">€0</div>
+                <div class="hint" id="buildReserve">Reserve: €0</div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <button class="btn btn-accent btn-sm" type="button" id="copyBuild">
+                  <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-copy"></use></svg>Copy plan
+                </button>
+                <button class="btn btn-ghost btn-sm" type="button" id="shareBuild">
+                  <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Copy plan link
+                </button>
+                <button class="btn btn-ghost btn-sm" type="button" id="printBuild">
+                  <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-printer"></use></svg>Print / save PDF
+                </button>
+                <button class="btn btn-primary btn-sm" type="button" id="sendBuild">
+                  <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>Send this build
+                </button>
+              </div>
+            </div>
+
+            <ul class="notes" id="buildNotes"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PARTS ================= -->
+    <section id="parts" class="alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="pill">Parts catalogue</span>
+          <h2>Gaming components, <em>filtered fast</em></h2>
+          <p>Search or filter the categories below and jump straight to current listings on Amazon Spain. Save what you like into a list to send with your request.</p>
+        </div>
+
+        <div class="toolbar reveal">
+          <div class="search">
+            <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+            <label class="visually-hidden" for="partSearch">Search components</label>
+            <input type="search" id="partSearch" placeholder="Search: GPU, DDR5, NVMe, 750W…" autocomplete="off">
+          </div>
+          <div class="filters" id="partFilters" role="group" aria-label="Filter by category"></div>
+        </div>
+
+        <div class="grid" id="partsGrid"></div>
+
+        <p class="hint" style="margin-top:20px;text-align:center">
+          Product links open Amazon Spain in a new tab. Prices and availability are controlled by Amazon and its sellers.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= COMPATIBILITY ================= -->
+    <section id="compatibility">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="pill">Compatibility</span>
+          <h2>Will these parts <em>actually work together?</em></h2>
+          <p>Select what you have or plan to buy. The checker validates CPU socket, memory type and power-supply headroom.</p>
+        </div>
+
+        <div class="checker">
+          <div class="panel reveal">
+            <div class="form-grid">
+              <div class="field">
+                <label for="ccCpu">Processor</label>
+                <select id="ccCpu"></select>
+              </div>
+
+              <div class="field">
+                <label for="ccBoard">Motherboard</label>
+                <select id="ccBoard"></select>
+              </div>
+
+              <div class="field">
+                <label for="ccRam">Memory kit</label>
+                <select id="ccRam"></select>
+              </div>
+
+              <div class="field">
+                <label for="ccGpu">Graphics card</label>
+                <select id="ccGpu"></select>
+              </div>
+
+              <div class="field">
+                <label for="ccPsu">Power supply</label>
+                <select id="ccPsu"></select>
+              </div>
+
+              <div class="field">
+                <label for="ccUsage">Typical use</label>
+                <select id="ccUsage">
+                  <option value="1">Mostly gaming</option>
+                  <option value="1.1">Gaming + streaming / recording</option>
+                  <option value="1.18">Heavy creative workloads</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-block" type="button" id="checkBtn">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield-check"></use></svg>
+              Run compatibility check
+            </button>
+          </div>
+
+          <div class="panel reveal">
+            <div class="console-title" style="margin-bottom:14px">Result</div>
+            <div class="verdict" id="ccResult" aria-live="polite"></div>
+            <button class="btn btn-ghost btn-block" type="button" id="ccToRequest" style="margin-top:16px">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg>
+              Ask about this combination
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PROCESS ================= -->
+    <section id="process" class="alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="pill">How it works</span>
+          <h2>From problem to <em>plan</em> in four steps</h2>
+          <p>No guessing, no overspending on the wrong part first.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step reveal">
+            <span class="step-icon" aria-hidden="true"><svg class="icon icon-sm" focusable="false"><use href="#i-clipboard-list"></use></svg></span>
+            <h3>Describe it</h3>
+            <p>Send your specs, budget and the problem — or the plan you generated on this page.</p>
+          </div>
+          <div class="step reveal">
+            <span class="step-icon" aria-hidden="true"><svg class="icon icon-sm" focusable="false"><use href="#i-shield-check"></use></svg></span>
+            <h3>We check compatibility</h3>
+            <p>Socket, memory, power, cooling and physical fit are verified before you buy anything.</p>
+          </div>
+          <div class="step reveal">
+            <span class="step-icon" aria-hidden="true"><svg class="icon icon-sm" focusable="false"><use href="#i-banknote"></use></svg></span>
+            <h3>Get a plan &amp; price</h3>
+            <p>You receive a clear, prioritised list: what to fix first, what to upgrade later.</p>
+          </div>
+          <div class="step reveal">
+            <span class="step-icon" aria-hidden="true"><svg class="icon icon-sm" focusable="false"><use href="#i-handshake"></use></svg></span>
+            <h3>Fix or build</h3>
+            <p>Work happens with your approval, and you get the old parts back plus a summary of the changes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section id="faq">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="pill">FAQ</span>
+          <h2>Questions people <em>always ask</em></h2>
+        </div>
+
+        <div class="faq">
+          <details class="reveal">
+            <summary>Are the prices on this site live?<svg class="icon icon-sm faq-chevron" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+            <div class="answer">No. Every figure here is a planning estimate to help you compare options. Component prices and stock change constantly, so the links open live Amazon Spain listings where you can confirm the real price before ordering.</div>
+          </details>
+
+          <details class="reveal">
+            <summary>How do I know if my parts are compatible?<svg class="icon icon-sm faq-chevron" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+            <div class="answer">Three things cause most failed builds: a CPU that does not fit the motherboard socket, memory of the wrong generation (DDR4 vs DDR5), and an undersized power supply. Use the compatibility checker above — it validates all three and recommends a wattage with safe headroom.</div>
+          </details>
+
+          <details class="reveal">
+            <summary>What power supply wattage do I need?<svg class="icon icon-sm faq-chevron" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+            <div class="answer">Add the graphics card and processor power draw, add roughly 90&nbsp;W for the rest of the system, then apply about 40&nbsp;% headroom for transient spikes and future upgrades. A modern 750&nbsp;W 80+ Gold unit covers most 1440p builds, while 4K-class cards want 850&nbsp;W or more.</div>
+          </details>
+
+          <details class="reveal">
+            <summary>Should I upgrade my CPU or my GPU first?<svg class="icon icon-sm faq-chevron" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+            <div class="answer">Check which component sits at 100&nbsp;% while gaming. High GPU usage with low CPU usage means the graphics card is the limit; the reverse points to a CPU bottleneck. On most older machines a fast NVMe drive plus more memory gives the biggest everyday improvement per euro.</div>
+          </details>
+
+          <details class="reveal">
+            <summary>Do you buy the parts for me?<svg class="icon icon-sm faq-chevron" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+            <div class="answer">Send the plan you generated and the parts you are considering, and you will get confirmation of what is compatible and what to avoid. Any purchase is always made in your name, in your own account, with your own payment method.</div>
+          </details>
+
+          <details class="reveal">
+            <summary>Do I need an account to send a request?<svg class="icon icon-sm faq-chevron" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+            <div class="answer">No — you can send a request straight away as a guest. An account is optional, and it simply keeps your requests together so you can look them up later. Creating one takes an email address and a password, and if you ever forget the password you can reset it from a link on the sign-in form.</div>
+          </details>
+
+          <details class="reveal">
+            <summary>Is my information stored on this website?<svg class="icon icon-sm faq-chevron" aria-hidden="true" focusable="false"><use href="#i-chevron-down"></use></svg></summary>
+            <div class="answer">Your request is delivered straight to GameFix Hub and stored so it cannot be lost, and you get a reference number to quote back. If the automatic delivery is ever unavailable, the form falls back to preparing a message in your browser for you to send by email or WhatsApp instead. Your saved list and form draft stay in this browser's local storage and can be cleared at any time. Nothing is sold, shared or used for advertising.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BOOKING ================= -->
+    <section id="booking" class="alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="pill">Contact</span>
+          <h2>Request <em>help or a quote</em></h2>
+          <p>Fill this in once. It reaches me directly and you get a reference number back — or prepare it and send it yourself if you prefer.</p>
+        </div>
+
+        <div class="booking-grid">
+          <form id="bookingForm" class="panel reveal" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="customerName">Your name</label>
+                <input id="customerName" name="customerName" autocomplete="name" placeholder="e.g. Mesha" required>
+                <p class="error-text" data-error-for="customerName">Please enter your name.</p>
+              </div>
+
+              <div class="field">
+                <label for="customerEmail">Email address</label>
+                <input id="customerEmail" name="customerEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+                <p class="error-text" data-error-for="customerEmail">Enter a valid email address.</p>
+              </div>
+
+              <div class="field">
+                <label for="customerPhone">Phone / WhatsApp <span style="color:var(--muted);font-weight:500">(optional)</span></label>
+                <input id="customerPhone" name="customerPhone" type="tel" autocomplete="tel" placeholder="+34 600 000 000">
+                <p class="error-text" data-error-for="customerPhone">Please check this number.</p>
+              </div>
+
+              <div class="field">
+                <label for="preferredContact">Preferred reply</label>
+                <select id="preferredContact" name="preferredContact">
+                  <option>WhatsApp</option>
+                  <option>Email</option>
+                  <option>Phone call</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="service">What do you need?</label>
+                <select id="service" name="service" required>
+                  <option value="">Choose a service</option>
+                  <option>PC Repair</option>
+                  <option>Overheating / Cooling</option>
+                  <option>Windows / Drivers</option>
+                  <option>Gaming PC Parts</option>
+                  <option>PC Building</option>
+                  <option>Performance Upgrade</option>
+                  <option>Compatibility Check</option>
+                  <option>Other</option>
+                </select>
+                <p class="error-text" data-error-for="service">Please choose a service.</p>
+              </div>
+
+              <div class="field">
+                <label for="urgency">How urgent is it?</label>
+                <select id="urgency" name="urgency">
+                  <option>Just planning ahead</option>
+                  <option>This week</option>
+                  <option>As soon as possible</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="budget">Budget <span style="color:var(--muted);font-weight:500">(optional)</span></label>
+                <input id="budget" name="budget" placeholder="e.g. €900 for the whole build">
+              </div>
+
+              <div class="field">
+                <label for="pcSpecs">Current PC <span style="color:var(--muted);font-weight:500">(optional)</span></label>
+                <input id="pcSpecs" name="pcSpecs" placeholder="e.g. i5-9400F, GTX 1660, 16GB DDR4">
+              </div>
+
+              <div class="field span-2">
+                <label for="details">Describe your PC, problem or build goal</label>
+                <textarea id="details" name="details" required placeholder="Symptoms, error messages, games you play, parts you already own, or the plan you generated above."></textarea>
+                <p class="error-text" data-error-for="details">Please add at least 15 characters so the request is useful.</p>
+              </div>
+            </div>
+
+            <p class="hint" id="accountHint" hidden></p>
+
+            <p class="hint">
+              Your request goes straight to my inbox and is kept under a reference you can quote back to me. A draft is held in this browser so you never lose your typing — "Clear draft" wipes it.
+            </p>
+
+            <div class="field honeypot" aria-hidden="true">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit" id="submitRequest">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>
+                <span id="submitLabel">Send my request</span>
+              </button>
+              <button class="btn btn-ghost" type="button" id="clearDraft">Clear draft</button>
+            </div>
+
+            <div class="status-box" id="statusBox" role="status" aria-live="polite"></div>
+
+            <div class="receipt" id="receipt" hidden>
+              <div class="receipt-top">
+                <div>
+                  <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700">Your reference</div>
+                  <div class="receipt-ref" id="receiptRef">-</div>
+                </div>
+                <button class="btn btn-ghost" type="button" id="copyRef">
+                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-copy"></use></svg>Copy reference
+                </button>
+              </div>
+              <p class="receipt-meta" id="receiptMeta"></p>
+              <p class="receipt-meta" id="receiptEmailNote" hidden>
+                A copy is on its way to the address you gave me. Keep the reference handy if you need to follow up.
+              </p>
+            </div>
+
+            <div id="ledgerWrap" hidden style="margin-top:18px">
+              <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700">Sent from this device</div>
+              <div class="ledger" id="ledger"></div>
+            </div>
+
+            <div class="form-actions" id="sendActions" hidden>
+              <span class="hint" style="margin:0;flex:1 1 100%" id="sendActionsNote">Prefer to send it yourself? Use any of these:</span>
+              <a class="btn btn-primary" id="emailLink" href="#">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>
+                Send by email
+              </a>
+              <a class="btn btn-ghost" id="whatsappLink" href="#" target="_blank" rel="noopener noreferrer">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg>Send by WhatsApp
+              </a>
+              <button class="btn btn-ghost" type="button" id="copyRequest">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-copy"></use></svg>Copy request
+              </button>
+              <button class="btn btn-ghost" type="button" id="printRequest">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-printer"></use></svg>Print
+              </button>
+            </div>
+          </form>
+
+          <div class="panel reveal">
+            <h3 style="font-size:19px">Direct contact</h3>
+            <p style="color:var(--muted);font-size:14.5px;margin-top:8px">
+              Prefer to skip the form? Use one of these and include your PC specs if you have them.
+            </p>
+
+            <div class="contact-list">
+              <div class="contact-item">
+                <span class="ico" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-mail"></use></svg></span>
+                <div>
+                  <b>Email</b>
+                  <a href="mailto:meshackosei50@gmail.com">meshackosei50@gmail.com</a>
+                </div>
+              </div>
+
+              <div class="contact-item">
+                <span class="ico" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-message-circle"></use></svg></span>
+                <div>
+                  <b>WhatsApp</b>
+                  <a href="https://wa.me/34614268211" target="_blank" rel="noopener noreferrer">+34 614 268 211</a>
+                </div>
+              </div>
+
+              <div class="contact-item">
+                <span class="ico" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-clock"></use></svg></span>
+                <div>
+                  <b>Reply time</b>
+                  <span>Usually within 24 hours, Monday to Saturday</span>
+                </div>
+              </div>
+
+              <div class="contact-item">
+                <span class="ico" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-map-pin"></use></svg></span>
+                <div>
+                  <b>Service area</b>
+                  <span>Local drop-off / pickup and remote guidance</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="notice" style="margin:20px 0 0">
+              <svg class="icon icon-sm icon-inline" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>
+              <strong>Tip:</strong> run the compatibility check first and add the result to your message — it usually saves two or three back-and-forth messages.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a class="logo" href="#home" style="margin-bottom:12px">
+            <span class="logo-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round">
+                <rect x="3" y="5" width="18" height="11" rx="3"></rect>
+                <path d="M9 20h6M12 16v4"></path>
+              </svg>
+            </span>
+            <span>Game<span>Fix</span> Hub</span>
+          </a>
+          <p>PC repairs, gaming component advice, custom builds and upgrade planning — clear guidance before you spend.</p>
+        </div>
+
+        <div>
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#services">Diagnostics &amp; repair</a></li>
+            <li><a href="#services">Overheating &amp; cooling</a></li>
+            <li><a href="#services">Performance upgrades</a></li>
+            <li><a href="#services">Windows &amp; drivers</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Tools</h4>
+          <ul>
+            <li><a href="#configurator">Build planner</a></li>
+            <li><a href="#compatibility">Compatibility checker</a></li>
+            <li><a href="#parts">Parts catalogue</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:meshackosei50@gmail.com">meshackosei50@gmail.com</a></li>
+            <li><a href="https://wa.me/34614268211" target="_blank" rel="noopener noreferrer">WhatsApp chat</a></li>
+            <li><a href="#booking">Request a quote</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span>© <span id="year"></span> GameFix Hub — built for gamers who would rather play than troubleshoot.</span>
+        <span>Estimates only. Product links open Amazon Spain; prices and availability are set by Amazon and its sellers.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= SAVED LIST DRAWER ================= -->
+  <div class="backdrop" id="backdrop"></div>
+
+  <aside class="drawer" id="savedPanel" aria-label="Saved parts list" aria-hidden="true">
+    <div class="drawer-head">
+      <div>
+        <strong>Saved parts</strong>
+        <div class="hint" id="savedTotalHint">Nothing saved yet</div>
+      </div>
+      <button class="icon-btn" type="button" id="closeSaved" aria-label="Close saved list">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+      </button>
+    </div>
+
+    <div class="drawer-body" id="savedBody"></div>
+
+    <div class="drawer-foot">
+      <button class="btn btn-primary btn-block" type="button" id="savedToRequest">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clipboard-list"></use></svg>
+        Add list to my request
+      </button>
+      <button class="btn btn-ghost btn-block" type="button" id="clearSaved">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+        Clear saved list
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= ACCOUNT PANEL ================= -->
+  <aside class="drawer" id="accountPanel" aria-label="Your account" aria-hidden="true">
+    <div class="drawer-head">
+      <div>
+        <strong id="accountTitle">Your account</strong>
+        <div class="hint" id="accountSubtitle">Sign in to keep every request in one place</div>
+      </div>
+      <button class="icon-btn" type="button" id="closeAccount" aria-label="Close account panel">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+
+      <!-- signed out -->
+      <div id="acctSignedOut">
+        <div class="tabs" role="tablist" aria-label="Account">
+          <button class="tab" type="button" id="tabSignIn" role="tab" aria-selected="true">Sign in</button>
+          <button class="tab" type="button" id="tabSignUp" role="tab" aria-selected="false">Create account</button>
+        </div>
+
+        <form class="auth-form" id="signInForm" novalidate>
+          <label for="signInEmail">Email</label>
+          <input id="signInEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <label for="signInPassword">Password</label>
+          <input id="signInPassword" type="password" autocomplete="current-password" required>
+          <button class="btn btn-primary btn-block" type="submit" id="signInSubmit">Sign in</button>
+          <button class="link-btn" type="button" id="toForgot">Forgot your password?</button>
+        </form>
+
+        <form class="auth-form" id="signUpForm" novalidate hidden>
+          <label for="signUpEmail">Email</label>
+          <input id="signUpEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <label for="signUpPassword">Choose a password</label>
+          <input id="signUpPassword" type="password" autocomplete="new-password" required>
+          <p class="hint">At least 8 characters. I will email you a link to confirm the address before you can sign in.</p>
+          <button class="btn btn-primary btn-block" type="submit" id="signUpSubmit">Create my account</button>
+        </form>
+
+        <form class="auth-form" id="forgotForm" novalidate hidden>
+          <label for="forgotEmail">Your account email</label>
+          <input id="forgotEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <p class="hint">I will email you a secure link to choose a new password.</p>
+          <button class="btn btn-primary btn-block" type="submit" id="forgotSubmit">Email me a reset link</button>
+          <button class="link-btn" type="button" id="toSignIn">Back to sign in</button>
+        </form>
+
+        <p class="auth-msg" id="authMessage" role="status" aria-live="polite" hidden></p>
+      </div>
+
+      <!-- signed in -->
+      <div id="acctSignedIn" hidden>
+        <div class="account-identity">
+          <span class="ico" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-user"></use></svg></span>
+          <div>
+            <b id="acctEmail">-</b>
+            <div class="hint" id="acctSince">Signed in</div>
+          </div>
+        </div>
+
+        <div class="mini-head">
+          <strong>Your requests</strong>
+          <button class="link-btn" type="button" id="acctRefresh" style="margin:0">Refresh</button>
+        </div>
+        <div class="ledger" id="acctRequests"></div>
+
+        <button class="btn btn-ghost btn-block" type="button" id="acctPassword" style="margin-top:18px">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key-round"></use></svg>
+          Change password
+        </button>
+        <button class="btn btn-ghost btn-block" type="button" id="acctSignOut" style="margin-top:8px">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-log-out"></use></svg>
+          Sign out
+        </button>
+        <p class="auth-msg" id="accountMessage" role="status" aria-live="polite" hidden></p>
+      </div>
+
+      <!-- set a new password, from a recovery link or from inside the account -->
+      <div id="acctRecovery" hidden>
+        <p class="hint" id="recoveryIntro">Choose a new password for your account.</p>
+        <div class="auth-form">
+          <label for="newPassword">New password</label>
+          <input id="newPassword" type="password" autocomplete="new-password" required>
+          <label for="newPassword2">Repeat new password</label>
+          <input id="newPassword2" type="password" autocomplete="new-password" required>
+          <button class="btn btn-primary btn-block" type="button" id="saveNewPassword">Save new password</button>
+          <button class="link-btn" type="button" id="recoveryCancel">Cancel</button>
+        </div>
+        <p class="auth-msg" id="recoveryMessage" role="status" aria-live="polite" hidden></p>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+  <button class="to-top" type="button" id="toTop" aria-label="Back to top" hidden>
+    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
+  </button>
+
+  <!-- Filled in only when printing a plan or request -->
+  <div id="printArea" aria-hidden="true"></div>
+
+  <script>
+    /* ==============================================================
+       GameFix Hub - front-end app
+       Everything runs locally in the browser. No data is uploaded.
+       ============================================================== */
+    (function () {
+      "use strict";
+
+      /* ---------- EDIT THESE TWO CONSTANTS ---------- */
+      var BUSINESS_EMAIL = "meshackosei50@gmail.com";
+      var WHATSAPP_NUMBER = "34614268211"; /* country code + number, no +, spaces or dashes */
+
+      /* ---------------- helpers ---------------- */
+      const $ = (sel, root) => (root || document).querySelector(sel);
+      const $$ = (sel, root) => Array.prototype.slice.call((root || document).querySelectorAll(sel));
+      const euro = (n) => "€" + Math.round(n).toLocaleString("es-ES");
+      const amazon = (q) => "https://www.amazon.es/s?k=" + encodeURIComponent(q);
+      const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      /* references a symbol in the inlined icon sprite */
+      const icon = (name, cls) => '<svg class="icon ' + (cls || "") + '" aria-hidden="true" focusable="false"><use href="#i-' + name + '"></use></svg>';
+      const store = {
+        get: function (key, fallback) {
+          try {
+            const raw = localStorage.getItem(key);
+            return raw === null ? fallback : JSON.parse(raw);
+          } catch (e) { return fallback; }
+        },
+        set: function (key, value) {
+          try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* storage disabled */ }
+        },
+        del: function (key) { try { localStorage.removeItem(key); } catch (e) {} }
+      };
+
+      /* ---------------- toasts ---------------- */
+      const toastHost = $("#toasts");
+      function toast(message, type) {
+        const el = document.createElement("div");
+        el.className = "toast" + (type ? " is-" + type : "");
+        const glyph = type === "ok" ? "circle-check" : (type === "warn" ? "triangle-alert" : "info");
+        el.innerHTML = icon(glyph, "icon-sm") + "<span>" + esc(message) + "</span>";
+        toastHost.appendChild(el);
+        setTimeout(function () {
+          el.classList.add("is-out");
+          setTimeout(function () { el.remove(); }, 260);
+        }, 3200);
+      }
+
+      function copyText(text, label) {
+        const done = function () { toast((label || "Copied") + " copied to clipboard", "ok"); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, fallback);
+        } else {
+          fallback();
+        }
+        function fallback() {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand("copy"); done(); }
+          catch (e) { toast("Copy failed - select the text manually.", "warn"); }
+          ta.remove();
+        }
+      }
+
+      /* ---------------- catalogue (planning estimates in EUR) ---------------- */
+      const CATALOG = {
+        cpu: [
+          { n: "AMD Ryzen 5 5500", p: 100, tdp: 65, socket: "AM4", plat: "DDR4", note: "6c/12t entry" },
+          { n: "AMD Ryzen 5 5600", p: 120, tdp: 65, socket: "AM4", plat: "DDR4", note: "6c/12t value pick" },
+          { n: "Intel Core i3-12100F", p: 95, tdp: 58, socket: "LGA1700", plat: "DDR4", note: "4c/8t budget" },
+          { n: "Intel Core i5-12400F", p: 135, tdp: 65, socket: "LGA1700", plat: "DDR4", note: "6c/12t all-rounder" },
+          { n: "Intel Core i5-14400F", p: 180, tdp: 65, socket: "LGA1700", plat: "DDR5", note: "10c/16t modern" },
+          { n: "AMD Ryzen 5 7600", p: 190, tdp: 65, socket: "AM5", plat: "DDR5", note: "6c/12t efficient" },
+          { n: "AMD Ryzen 5 9600X", p: 215, tdp: 65, socket: "AM5", plat: "DDR5", note: "newest 6c/12t" },
+          { n: "Intel Core i5-14600KF", p: 235, tdp: 125, socket: "LGA1700", plat: "DDR5", note: "14c/20t" },
+          { n: "AMD Ryzen 7 7700", p: 285, tdp: 65, socket: "AM5", plat: "DDR5", note: "8c/16t" },
+          { n: "AMD Ryzen 7 7800X3D", p: 420, tdp: 120, socket: "AM5", plat: "DDR5", note: "gaming favourite" },
+          { n: "Intel Core i7-14700K", p: 400, tdp: 125, socket: "LGA1700", plat: "DDR5", note: "20c/28t hybrid" },
+          { n: "AMD Ryzen 7 9800X3D", p: 530, tdp: 120, socket: "AM5", plat: "DDR5", note: "top gaming CPU" },
+          { n: "AMD Ryzen 9 9950X", p: 640, tdp: 170, socket: "AM5", plat: "DDR5", note: "16c/32t workstation" }
+        ],
+        gpu: [
+          { n: "Radeon RX 6600 8GB", p: 190, tdp: 132, tier: 2, note: "1080p high" },
+          { n: "GeForce RTX 3050 8GB", p: 200, tdp: 130, tier: 2, note: "1080p high" },
+          { n: "Radeon RX 7600 8GB", p: 285, tdp: 165, tier: 3, note: "1080p ultra" },
+          { n: "GeForce RTX 4060 8GB", p: 300, tdp: 115, tier: 3, note: "1080p ultra, efficient" },
+          { n: "GeForce RTX 5060 8GB", p: 330, tdp: 145, tier: 4, note: "1080p ultra + upscaling" },
+          { n: "Radeon RX 9060 XT 16GB", p: 370, tdp: 160, tier: 4, note: "1440p entry, 16GB" },
+          { n: "Radeon RX 7700 XT 12GB", p: 430, tdp: 245, tier: 5, note: "1440p high" },
+          { n: "GeForce RTX 5060 Ti 16GB", p: 460, tdp: 180, tier: 5, note: "1440p high, 16GB" },
+          { n: "Radeon RX 7800 XT 16GB", p: 520, tdp: 263, tier: 6, note: "1440p ultra" },
+          { n: "GeForce RTX 5070 12GB", p: 620, tdp: 250, tier: 6, note: "1440p ultra" },
+          { n: "Radeon RX 9070 16GB", p: 660, tdp: 220, tier: 7, note: "1440p+ / 4K entry" },
+          { n: "Radeon RX 9070 XT 16GB", p: 730, tdp: 304, tier: 7, note: "4K capable" },
+          { n: "GeForce RTX 5070 Ti 16GB", p: 880, tdp: 300, tier: 8, note: "4K high" },
+          { n: "Radeon RX 7900 XTX 24GB", p: 990, tdp: 355, tier: 8, note: "4K high, 24GB" },
+          { n: "GeForce RTX 5080 16GB", p: 1180, tdp: 360, tier: 9, note: "4K ultra" },
+          { n: "GeForce RTX 5090 32GB", p: 2350, tdp: 575, tier: 10, note: "no-compromise 4K" }
+        ],
+        mobo: [
+          { n: "B550M (AM4, DDR4)", p: 90, socket: "AM4", ram: "DDR4", note: "solid value" },
+          { n: "B660M (LGA1700, DDR4)", p: 110, socket: "LGA1700", ram: "DDR4", note: "budget Intel" },
+          { n: "B760 (LGA1700, DDR5)", p: 155, socket: "LGA1700", ram: "DDR5", note: "modern Intel mid" },
+          { n: "B650M (AM5, DDR5)", p: 160, socket: "AM5", ram: "DDR5", note: "core AM5 pick" },
+          { n: "B850 (AM5, DDR5)", p: 215, socket: "AM5", ram: "DDR5", note: "PCIe 5.0 + WiFi" },
+          { n: "Z790 (LGA1700, DDR5)", p: 250, socket: "LGA1700", ram: "DDR5", note: "overclocking Intel" },
+          { n: "X870 (AM5, DDR5)", p: 285, socket: "AM5", ram: "DDR5", note: "high-end AM5" }
+        ],
+        ram: [
+          { n: "16GB (2x8GB) DDR4-3200", p: 40, type: "DDR4", cap: 16 },
+          { n: "32GB (2x16GB) DDR4-3200", p: 72, type: "DDR4", cap: 32 },
+          { n: "32GB (2x16GB) DDR5-6000 CL30", p: 110, type: "DDR5", cap: 32 },
+          { n: "48GB (2x24GB) DDR5-6000", p: 165, type: "DDR5", cap: 48 },
+          { n: "64GB (2x32GB) DDR5-6000", p: 230, type: "DDR5", cap: 64 }
+        ],
+        storage: [
+          { n: "500GB NVMe Gen3", p: 45, cap: 500 },
+          { n: "1TB NVMe Gen4", p: 72, cap: 1000 },
+          { n: "2TB NVMe Gen4", p: 128, cap: 2000 },
+          { n: "4TB NVMe Gen4", p: 260, cap: 4000 }
+        ],
+        psu: [
+          { n: "550W 80+ Bronze", p: 55, w: 550 },
+          { n: "650W 80+ Bronze", p: 70, w: 650 },
+          { n: "750W 80+ Gold ATX 3.0", p: 100, w: 750 },
+          { n: "850W 80+ Gold ATX 3.0", p: 130, w: 850 },
+          { n: "1000W 80+ Gold ATX 3.0", p: 180, w: 1000 },
+          { n: "1200W 80+ Platinum ATX 3.0", p: 265, w: 1200 }
+        ],
+        box: [
+          { n: "Compact mesh mATX case", p: 55, note: "2 fans included" },
+          { n: "Mid-tower mesh airflow", p: 85, note: "3 fans included" },
+          { n: "Mid-tower tempered glass", p: 125, note: "airflow + display" },
+          { n: "High-airflow full tower", p: 185, note: "maximum cooling headroom" }
+        ],
+        cooler: [
+          { n: "Single-tower 120mm air", p: 40, cap: 150 },
+          { n: "Dual-tower 120mm air", p: 72, cap: 220 },
+          { n: "240mm liquid AIO", p: 95, cap: 250 },
+          { n: "360mm liquid AIO", p: 145, cap: 320 }
+        ]
+      };
+
+      const LABELS = { gpu: "GPU", cpu: "CPU", mobo: "Board", ram: "RAM", storage: "Storage", psu: "PSU", box: "Case", cooler: "Cooling" };
+      const ORDER = ["gpu", "cpu", "mobo", "ram", "storage", "psu", "box", "cooler"];
+
+      const USE_CASES = {
+        esports1080: {
+          label: "Competitive gaming - 1080p high FPS", minTier: 2, minRam: 16, minStorage: 500, ddr5: false,
+          shares: { gpu: .30, cpu: .22, mobo: .09, ram: .06, storage: .07, psu: .09, box: .08, cooler: .05 }
+        },
+        aaa1440: {
+          label: "AAA gaming - 1440p high settings", minTier: 4, minRam: 32, minStorage: 1000, ddr5: true,
+          shares: { gpu: .38, cpu: .17, mobo: .08, ram: .08, storage: .07, psu: .08, box: .07, cooler: .05 }
+        },
+        aaa4k: {
+          label: "4K gaming - maximum settings", minTier: 8, minRam: 32, minStorage: 2000, ddr5: true,
+          shares: { gpu: .46, cpu: .15, mobo: .08, ram: .08, storage: .07, psu: .08, box: .06, cooler: .05 }
+        },
+        creator: {
+          label: "Creating - streaming - editing", minTier: 6, minRam: 64, minStorage: 2000, ddr5: true,
+          shares: { gpu: .34, cpu: .22, mobo: .08, ram: .12, storage: .09, psu: .08, box: .05, cooler: .06 }
+        },
+        everyday: {
+          label: "Everyday use + light gaming", minTier: 2, minRam: 16, minStorage: 500, ddr5: false,
+          shares: { gpu: .24, cpu: .21, mobo: .10, ram: .08, storage: .10, psu: .10, box: .09, cooler: .05 }
+        }
+      };
+
+      /* ---------------- build engine ---------------- */
+      function pickPart(cat, alloc, filter) {
+        var list = CATALOG[cat].filter(filter || function () { return true; });
+        if (!list.length) list = CATALOG[cat].slice();
+        list.sort(function (a, b) { return b.p - a.p; });
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].p <= alloc) return list[i];
+        }
+        return list[list.length - 1];
+      }
+
+      function generateBuild(budget, useCaseKey, profile) {
+        const uc = USE_CASES[useCaseKey] || USE_CASES.aaa1440;
+        const notes = [];
+        const partsBudget = budget * 0.9;
+        const s = uc.shares;
+        const preferDdr5 = uc.ddr5 || budget >= 1100;
+
+        var cpu = pickPart("cpu", partsBudget * s.cpu, preferDdr5
+          ? function (c) { return c.plat === "DDR5"; }
+          : function () { return true; });
+
+        if (profile === "quiet" && cpu.tdp > 120) {
+          const quieter = pickPart("cpu", partsBudget * s.cpu, function (c) {
+            return c.tdp <= 120 && (preferDdr5 ? c.plat === "DDR5" : true);
+          });
+          if (quieter) cpu = quieter;
+        }
+
+        const mobo = pickPart("mobo", partsBudget * s.mobo, function (m) {
+          return m.socket === cpu.socket && (preferDdr5 ? m.ram === "DDR5" : true);
+        });
+
+        const ram = pickPart("ram", partsBudget * s.ram, function (r) {
+          return r.type === mobo.ram && r.cap >= uc.minRam;
+        });
+
+        const gpu = pickPart("gpu", partsBudget * s.gpu, function (g) { return g.tier >= uc.minTier - 1; });
+
+        const storageAlloc = profile === "storage" ? partsBudget * (s.storage + .06) : partsBudget * s.storage;
+        const storagePart = pickPart("storage", storageAlloc, function (t) { return t.cap >= uc.minStorage; });
+
+        /* power supply: estimated load + ~40% headroom, snapped to retail sizes */
+        const load = cpu.tdp + gpu.tdp + 90;
+        const recommended = Math.max(550, Math.ceil((load * 1.4) / 50) * 50);
+        const enough = CATALOG.psu.filter(function (p) { return p.w >= recommended; })
+          .sort(function (a, b) { return a.p - b.p; });
+        var psu = null;
+        for (var i = 0; i < enough.length; i++) {
+          if (enough[i].p <= partsBudget * s.psu) { psu = enough[i]; break; }
+        }
+        if (!psu) psu = enough[0] || CATALOG.psu[CATALOG.psu.length - 1];
+
+        const cooler = pickPart("cooler", partsBudget * s.cooler, function (c) { return c.cap >= cpu.tdp + 25; });
+        const box = pickPart("box", partsBudget * s.box);
+
+        const parts = { gpu: gpu, cpu: cpu, mobo: mobo, ram: ram, storage: storagePart, psu: psu, box: box, cooler: cooler };
+        var total = 0;
+        ORDER.forEach(function (k) { total += parts[k].p; });
+
+        if (psu.p > partsBudget * s.psu) {
+          notes.push("Power supply set to " + psu.w + "W instead of a cheaper unit: " + recommended + "W is recommended for a " + Math.round(load) + "W estimated load.");
+        }
+        if (gpu.tier < uc.minTier) {
+          notes.push("At this budget the graphics card sits below the ideal tier for " + uc.label.toLowerCase() + " - expect to lower settings or use upscaling.");
+        }
+        if (ram.cap < uc.minRam) {
+          notes.push("Memory is " + ram.cap + "GB instead of the " + uc.minRam + "GB target for this workload.");
+        }
+        if (total > budget) {
+          notes.push("These parts come to " + euro(total) + " - about " + euro(total - budget) + " above your " + euro(budget) + " budget.");
+          notes.push("Either raise the budget to roughly " + euro(Math.ceil(total / 50) * 50) + " for this goal, or pick a lower resolution above and the same money goes further.");
+        } else {
+          notes.push("Leaves " + euro(budget - total) + " as reserve for shipping, cables, fans or a Windows licence.");
+        }
+        notes.push("Estimated draw about " + Math.round(load) + "W at full load; a " + psu.w + "W supply leaves safe headroom for transient spikes.");
+
+        return {
+          budget: budget, useCaseKey: useCaseKey, profile: profile, uc: uc,
+          parts: parts, total: total, reserve: budget - total,
+          notes: notes, load: load, recommended: recommended
+        };
+      }
+
+      function buildToText(build) {
+        const lines = [];
+        lines.push("GameFix Hub - PC build plan");
+        lines.push("Budget: " + euro(build.budget));
+        lines.push("Goal: " + build.uc.label);
+        lines.push("");
+        lines.push("Estimated parts list:");
+        ORDER.forEach(function (k) {
+          lines.push("- " + LABELS[k] + ": " + build.parts[k].n + " - est. " + euro(build.parts[k].p));
+        });
+        lines.push("");
+        lines.push("Estimated parts total: " + euro(build.total));
+        lines.push("Budget reserve: " + euro(build.reserve));
+        lines.push("Estimated load: " + Math.round(build.load) + "W | recommended supply: " + build.recommended + "W");
+        lines.push("");
+        lines.push("Notes:");
+        build.notes.forEach(function (n) { lines.push("- " + n); });
+        lines.push("");
+        lines.push("(Planning estimates only - confirm live prices before buying. GameFix Hub)");
+        return lines.join("\n");
+      }
+
+      /* ---------------- build rendering ---------------- */
+      var currentBuild = null;
+
+      function renderBuild(build) {
+        currentBuild = build;
+        const list = $("#buildList");
+        list.innerHTML = "";
+
+        ORDER.forEach(function (k) {
+          const part = build.parts[k];
+          const row = document.createElement("div");
+          row.className = "build-row";
+          row.innerHTML =
+            "<b>" + LABELS[k] + "</b>" +
+            '<div><div class="part-name">' + esc(part.n) + "</div>" +
+            '<div class="part-sub">' + esc(part.note || (part.w ? part.w + "W" : "")) + "</div></div>" +
+            '<div class="part-cost">' + euro(part.p) + "<br>" +
+            '<a class="mini" href="' + amazon(part.n + " comprar") + '" target="_blank" rel="noopener noreferrer">check price' + icon("arrow-up-right", "icon-sm icon-inline") + "</a></div>";
+          list.appendChild(row);
+        });
+
+        $("#buildTotal").textContent = euro(build.total);
+        $("#buildReserve").textContent = "Budget reserve: " + euro(build.reserve) + " | recommended PSU " + build.recommended + "W";
+
+        const notesEl = $("#buildNotes");
+        notesEl.innerHTML = "";
+        build.notes.forEach(function (n) {
+          const li = document.createElement("li");
+          li.innerHTML = icon("check", "icon-sm") + "<span>" + esc(n) + "</span>";
+          notesEl.appendChild(li);
+        });
+
+        /* hero console mirrors the current plan */
+        const rows = $("#consoleRows");
+        rows.innerHTML = "";
+        [["GPU", build.parts.gpu.n], ["CPU", build.parts.cpu.n], ["RAM", build.parts.ram.n], ["PSU", build.parts.psu.n]].forEach(function (pair) {
+          const div = document.createElement("div");
+          div.className = "console-row";
+          div.innerHTML = "<b>" + pair[0] + "</b><span>" + esc(pair[1]) + "</span>";
+          rows.appendChild(div);
+        });
+        $("#consoleTotal").textContent = euro(build.total);
+        $("#consoleTarget").textContent = build.uc.label + " | " + euro(build.budget) + " budget";
+        const used = Math.min(100, Math.round((build.total / build.budget) * 100));
+        $("#consoleUsed").textContent = used + "%";
+        $("#consoleMeter").style.width = used + "%";
+      }
+
+      function readConfigurator() {
+        const budget = parseInt($("#budgetRange").value, 10);
+        $("#budgetOut").textContent = euro(budget);
+        return { budget: budget, useCase: $("#useCase").value, profile: $("#profile").value };
+      }
+
+      function runConfigurator(silent) {
+        const cfg = readConfigurator();
+        renderBuild(generateBuild(cfg.budget, cfg.useCase, cfg.profile));
+        if (!silent) toast("Build plan generated for " + euro(cfg.budget), "ok");
+      }
+
+      /* ---------------- parts catalogue ---------------- */
+      const PART_CARDS = [
+        { cat: "GPU", icon: "gpu", title: "Graphics cards (GPU)", from: 190, to: 2350, q: "tarjeta grafica gaming", desc: "Compare VRAM, performance tier, power draw and physical length before choosing a GPU.", keys: "gpu grafica geforce rtx radeon nvidia amd vram 4k 1440p" },
+        { cat: "CPU", icon: "cpu", title: "Processors (CPU)", from: 95, to: 640, q: "procesador gaming AMD Ryzen Intel Core", desc: "Match the processor to your motherboard socket and BIOS, and to what you actually run.", keys: "cpu procesador ryzen intel core i5 i7 i9 socket am4 am5 lga1700" },
+        { cat: "Board", icon: "circuit-board", title: "Motherboards", from: 90, to: 285, q: "placa base gaming AM5 DDR5", desc: "Check socket, DDR generation, M.2 slots, PCIe version and case form factor.", keys: "placa base motherboard b650 b850 x870 b760 z790 am5 lga1700 matx atx" },
+        { cat: "RAM", icon: "memory-stick", title: "Memory (RAM)", from: 40, to: 230, q: "memoria RAM DDR5 32GB 6000 CL30", desc: "DDR4 and DDR5 are not interchangeable. Capacity and kit layout matter more than big numbers.", keys: "ram memoria ddr4 ddr5 16gb 32gb 64gb 3200 6000 cl30 kit" },
+        { cat: "Storage", icon: "hard-drive", title: "SSD storage", from: 45, to: 260, q: "SSD NVMe Gen4 1TB 2TB", desc: "NVMe Gen4 drives load games fastest; check how many M.2 slots your board has.", keys: "ssd nvme m2 gen4 gen5 hdd disco 1tb 2tb 4tb" },
+        { cat: "PSU", icon: "plug-zap", title: "Power supplies (PSU)", from: 55, to: 265, q: "fuente alimentacion PC gaming 80 Plus Gold ATX 3.0", desc: "Wattage, 80+ rating and ATX 3.0 support matter with modern graphics cards.", keys: "psu fuente alimentacion watt 550 650 750 850 1000 1200 80 plus gold" },
+        { cat: "Case", icon: "pc-case", title: "PC cases", from: 55, to: 185, q: "caja PC gaming mesh airflow ATX", desc: "Ensure clearance for your GPU length, cooler height and radiator size.", keys: "caja case torre mesh airflow mini itx matx atx cristal templado" },
+        { cat: "Cooling", icon: "fan", title: "CPU cooling", from: 40, to: 145, q: "disipador CPU aire AIO 240 360 refrigeracion liquida", desc: "Air coolers are the best value per euro; AIOs handle the hottest high-wattage chips.", keys: "disipador cooler refrigeracion liquida aio aire ventilador 240 360" }
+      ];
+
+      const savedCats = store.get("gfh.saved", []);
+      var activeFilter = "All";
+      var searchTerm = "";
+
+      function renderFilters() {
+        const host = $("#partFilters");
+        host.innerHTML = "";
+        ["All"].concat(PART_CARDS.map(function (p) { return p.cat; })).forEach(function (c) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "chip";
+          btn.textContent = c;
+          btn.setAttribute("aria-pressed", String(c === activeFilter));
+          btn.addEventListener("click", function () {
+            activeFilter = c;
+            renderFilters();
+            renderParts();
+          });
+          host.appendChild(btn);
+        });
+      }
+
+      function renderParts() {
+        const grid = $("#partsGrid");
+        const term = searchTerm.trim().toLowerCase();
+        const matches = PART_CARDS.filter(function (p) {
+          const catOk = activeFilter === "All" || p.cat === activeFilter;
+          const textOk = !term || (p.title + " " + p.desc + " " + p.cat + " " + p.keys).toLowerCase().indexOf(term) !== -1;
+          return catOk && textOk;
+        });
+
+        grid.innerHTML = "";
+
+        if (!matches.length) {
+          grid.innerHTML = '<div class="empty-state"><strong>No categories match "' + esc(searchTerm) + '".</strong><br>Try "GPU", "DDR5", "NVMe", "750W" or clear the filter.</div>';
+          return;
+        }
+
+        matches.forEach(function (p) {
+          const isSaved = savedCats.indexOf(p.cat) !== -1;
+          const card = document.createElement("article");
+          card.className = "card part-card";
+          card.innerHTML =
+            '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px">' +
+              '<div class="card-icon" aria-hidden="true">' + icon(p.icon, "icon-lg") + "</div>" +
+              '<span class="tag">' + p.cat + "</span>" +
+            "</div>" +
+            "<h3>" + esc(p.title) + "</h3>" +
+            "<p>" + esc(p.desc) + "</p>" +
+            '<div class="price-range" style="margin-top:14px">' + euro(p.from) + " - " + euro(p.to) + "</div>" +
+            '<div class="price-note">typical retail range | planning estimate</div>' +
+            '<div class="part-actions">' +
+              '<a class="btn btn-primary btn-sm" href="' + amazon(p.q) + '" target="_blank" rel="noopener noreferrer" aria-label="View ' + esc(p.title) + ' listings on Amazon Spain" title="View ' + esc(p.title) + ' listings on Amazon Spain">Amazon.es' + icon("arrow-up-right", "icon-sm") + "</a>" +
+              '<button class="btn btn-ghost btn-sm save-btn' + (isSaved ? " is-saved" : "") + '" type="button" aria-label="Save ' + esc(p.title) + '">' + icon("heart", "icon-sm") + (isSaved ? "Saved" : "Save") + "</button>" +
+            "</div>";
+          card.querySelector(".save-btn").addEventListener("click", function () { toggleSaved(p.cat); });
+          grid.appendChild(card);
+        });
+      }
+
+      function toggleSaved(cat) {
+        const i = savedCats.indexOf(cat);
+        if (i === -1) { savedCats.push(cat); toast(cat + " saved to your list", "ok"); }
+        else { savedCats.splice(i, 1); toast(cat + " removed from your list"); }
+        store.set("gfh.saved", savedCats);
+        renderParts();
+        renderSaved();
+      }
+
+      function savedCardFor(cat) {
+        for (var i = 0; i < PART_CARDS.length; i++) {
+          if (PART_CARDS[i].cat === cat) return PART_CARDS[i];
+        }
+        return null;
+      }
+
+      function savedRange() {
+        var low = 0, high = 0;
+        savedCats.forEach(function (cat) {
+          const p = savedCardFor(cat);
+          if (p) { low += p.from; high += p.to; }
+        });
+        return { low: low, high: high };
+      }
+
+      function renderSaved() {
+        const body = $("#savedBody");
+        const count = $("#savedCount");
+        count.textContent = String(savedCats.length);
+        count.setAttribute("data-empty", savedCats.length === 0 ? "true" : "false");
+
+        if (!savedCats.length) {
+          body.innerHTML = '<p class="hint">Nothing saved yet. Use the Save button on any component category to keep it here.</p>';
+          $("#savedTotalHint").textContent = "Nothing saved yet";
+          return;
+        }
+
+        body.innerHTML = "";
+        savedCats.forEach(function (cat) {
+          const p = savedCardFor(cat);
+          if (!p) return;
+          const item = document.createElement("div");
+          item.className = "saved-item";
+          item.innerHTML =
+            '<span class="saved-icon" aria-hidden="true">' + icon(p.icon, "icon-sm") + "</span>" +
+            '<div style="flex:1"><b>' + esc(p.title) + "</b><span>" + euro(p.from) + " - " + euro(p.to) + "</span></div>" +
+            '<button class="btn btn-ghost btn-sm" type="button" aria-label="Remove ' + esc(p.title) + '">Remove</button>';
+          item.querySelector("button").addEventListener("click", function () { toggleSaved(cat); });
+          body.appendChild(item);
+        });
+
+        const range = savedRange();
+        $("#savedTotalHint").textContent = savedCats.length + " categories | " + euro(range.low) + " - " + euro(range.high) + " estimated";
+      }
+
+      function openSaved() {
+        $("#savedPanel").classList.add("is-open");
+        $("#savedPanel").setAttribute("aria-hidden", "false");
+        $("#backdrop").classList.add("is-open");
+        $("#savedToggle").setAttribute("aria-expanded", "true");
+      }
+
+      function closeSaved() {
+        $("#savedPanel").classList.remove("is-open");
+        $("#savedPanel").setAttribute("aria-hidden", "true");
+        $("#backdrop").classList.remove("is-open");
+        $("#savedToggle").setAttribute("aria-expanded", "false");
+      }
+
+      /* ---------------- compatibility checker ---------------- */
+      function fillSelect(el, items, labelFn) {
+        el.innerHTML = "";
+        items.forEach(function (item, i) {
+          const opt = document.createElement("option");
+          opt.value = String(i);
+          opt.textContent = labelFn(item);
+          el.appendChild(opt);
+        });
+      }
+
+      function initChecker() {
+        fillSelect($("#ccCpu"), CATALOG.cpu, function (c) { return c.n + " | " + c.socket + " | " + c.tdp + "W"; });
+        fillSelect($("#ccBoard"), CATALOG.mobo, function (m) { return m.n; });
+        fillSelect($("#ccRam"), CATALOG.ram, function (r) { return r.n; });
+        fillSelect($("#ccGpu"), CATALOG.gpu, function (g) { return g.n + " | " + g.tdp + "W"; });
+        fillSelect($("#ccPsu"), CATALOG.psu, function (p) { return p.n; });
+
+        /* sensible defaults: a modern mid-range machine */
+        $("#ccCpu").value = String(CATALOG.cpu.findIndex(function (c) { return c.n === "AMD Ryzen 5 7600"; }));
+        $("#ccBoard").value = String(CATALOG.mobo.findIndex(function (m) { return m.n === "B650M (AM5, DDR5)"; }));
+        $("#ccRam").value = String(CATALOG.ram.findIndex(function (r) { return r.n === "32GB (2x16GB) DDR5-6000 CL30"; }));
+        $("#ccGpu").value = String(CATALOG.gpu.findIndex(function (g) { return g.n === "GeForce RTX 5070 12GB"; }));
+        $("#ccPsu").value = String(CATALOG.psu.findIndex(function (p) { return p.w === 750; }));
+      }
+
+      function runChecker() {
+        const cpu = CATALOG.cpu[+$("#ccCpu").value];
+        const mobo = CATALOG.mobo[+$("#ccBoard").value];
+        const ram = CATALOG.ram[+$("#ccRam").value];
+        const gpu = CATALOG.gpu[+$("#ccGpu").value];
+        const psu = CATALOG.psu[+$("#ccPsu").value];
+        const usage = parseFloat($("#ccUsage").value);
+        const results = [];
+
+        results.push(mobo.socket === cpu.socket
+          ? { state: "ok", title: "CPU socket matches", text: cpu.n + " fits the " + mobo.n + " (" + cpu.socket + ")." }
+          : { state: "bad", title: "CPU socket mismatch", text: cpu.n + " needs " + cpu.socket + ", but " + mobo.n + " uses " + mobo.socket + ". These two cannot be used together." });
+
+        results.push(ram.type === mobo.ram
+          ? { state: "ok", title: "Memory type matches", text: ram.n + " is " + ram.type + ", which is what the board accepts." }
+          : { state: "bad", title: "Memory type mismatch", text: "The board takes " + mobo.ram + " but you selected " + ram.type + ". The slots are physically different." });
+
+        const load = Math.round((cpu.tdp + gpu.tdp + 90) * usage);
+        const recommended = Math.max(550, Math.ceil((load * 1.4) / 50) * 50);
+        const deficit = recommended - psu.w;
+
+        if (deficit <= 0) {
+          results.push({ state: "ok", title: "Power supply is adequate", text: "Estimated draw ~" + load + "W, so " + psu.w + "W leaves " + (psu.w - load) + "W of headroom." });
+        } else if (deficit <= 100) {
+          results.push({ state: "warn", title: "Power supply is tight", text: "Estimated draw ~" + load + "W and " + recommended + "W is recommended. " + psu.w + "W usually boots, but spikes can cause shutdowns." });
+        } else {
+          results.push({ state: "bad", title: "Power supply too small", text: "Estimated draw ~" + load + "W and at least " + recommended + "W is recommended. A " + psu.w + "W unit risks instability under load." });
+        }
+
+        const useLabel = usage >= 1.18 ? "creative workloads" : (usage >= 1.1 ? "gaming plus streaming" : "gaming");
+
+        if (ram.cap < 16) {
+          results.push({ state: "warn", title: "Memory capacity is low", text: ram.cap + "GB is below the 16GB most modern games expect. A matched second kit is the cheapest first upgrade." });
+        } else if (ram.cap >= 64 && usage < 1.1) {
+          results.push({ state: "warn", title: "Memory may be oversized", text: ram.cap + "GB is more than " + useLabel + " needs. Spending the difference on the graphics card would help more." });
+        } else {
+          results.push({ state: "ok", title: "Memory capacity is sensible", text: ram.cap + "GB suits " + useLabel + "." });
+        }
+
+        if (gpu.tier >= 8 && cpu.tdp < 100 && cpu.n.indexOf("Ryzen 5") !== -1) {
+          results.push({ state: "warn", title: "Possible CPU bottleneck", text: gpu.n + " is a high-tier card and a 6-core part can hold it back in CPU-heavy titles. A 7800X3D-class chip removes that limit." });
+        } else {
+          results.push({ state: "ok", title: "Balanced pairing", text: cpu.n + " and " + gpu.n + " are a reasonable match for " + (usage >= 1.18 ? "creative" : "gaming") + " work." });
+        }
+
+        const host = $("#ccResult");
+        host.innerHTML = "";
+        results.forEach(function (r) {
+          const row = document.createElement("div");
+          row.className = "verdict-row";
+          const label = r.state === "ok" ? "Pass" : (r.state === "warn" ? "Check" : "Fail");
+          row.innerHTML = '<span class="tag is-' + r.state + '">' + label + "</span><div><strong>" + esc(r.title) + "</strong><p>" + esc(r.text) + "</p></div>";
+          host.appendChild(row);
+        });
+
+        return { cpu: cpu, mobo: mobo, ram: ram, gpu: gpu, psu: psu, load: load, recommended: recommended, results: results };
+      }
+
+      function checkerToText(set) {
+        const lines = [];
+        lines.push("GameFix Hub - compatibility check");
+        lines.push("CPU: " + set.cpu.n);
+        lines.push("Motherboard: " + set.mobo.n);
+        lines.push("Memory: " + set.ram.n);
+        lines.push("GPU: " + set.gpu.n);
+        lines.push("PSU: " + set.psu.n + " (" + set.psu.w + "W)");
+        lines.push("Estimated load: " + set.load + "W | recommended supply: " + set.recommended + "W");
+        lines.push("");
+        set.results.forEach(function (r) {
+          lines.push("[" + (r.state === "ok" ? "PASS" : (r.state === "warn" ? "CHECK" : "FAIL")) + "] " + r.title + ": " + r.text);
+        });
+        return lines.join("\n");
+      }
+
+      /* ---------------- request form ---------------- */
+      const FORM_FIELDS = ["customerName", "customerEmail", "customerPhone", "service", "urgency", "budget", "pcSpecs", "details", "preferredContact"];
+      var preparedRequest = "";
+      var extraContext = "";
+
+      function fieldValue(id) { return ($("#" + id).value || "").trim(); }
+
+      function setError(id, hasError) {
+        const input = $("#" + id);
+        const field = input.closest(".field");
+        input.setAttribute("aria-invalid", hasError ? "true" : "false");
+        if (field) field.classList.toggle("has-error", !!hasError);
+      }
+
+      function validateForm() {
+        var ok = true;
+        const name = fieldValue("customerName");
+        const email = fieldValue("customerEmail");
+        const phone = fieldValue("customerPhone");
+        const service = fieldValue("service");
+        const details = fieldValue("details");
+
+        setError("customerName", !name);
+        if (!name) ok = false;
+
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+        setError("customerEmail", !emailOk);
+        if (!emailOk) ok = false;
+
+        /* The API refuses a WhatsApp/phone reply with no number to call back on,
+           so catch it here as a field error rather than as a failed send. */
+        const wantsCallback = /whatsapp|phone/i.test(fieldValue("preferredContact"));
+        const phoneOk = !phone || /^[+()\-\s\d]{6,}$/.test(phone);
+        const phoneMissing = wantsCallback && !phone;
+        const phoneMsg = $('.error-text[data-error-for="customerPhone"]');
+        if (phoneMsg) {
+          phoneMsg.textContent = phoneMissing
+            ? "Add a number so I can reply the way you asked, or switch the reply preference to email."
+            : "Please check this number.";
+        }
+        setError("customerPhone", !phoneOk || phoneMissing);
+        if (!phoneOk || phoneMissing) ok = false;
+
+        setError("service", !service);
+        if (!service) ok = false;
+
+        setError("details", details.length < 15);
+        if (details.length < 15) ok = false;
+
+        return ok;
+      }
+
+      function buildRequestText() {
+        const lines = [];
+        lines.push("GameFix Hub - service request");
+        lines.push("");
+        lines.push("Name: " + fieldValue("customerName"));
+        lines.push("Customer email: " + fieldValue("customerEmail"));
+        if (fieldValue("customerPhone")) lines.push("Phone / WhatsApp: " + fieldValue("customerPhone"));
+        lines.push("Preferred reply: " + fieldValue("preferredContact"));
+        lines.push("Service: " + fieldValue("service"));
+        lines.push("Urgency: " + fieldValue("urgency"));
+        lines.push("Budget: " + (fieldValue("budget") || "Not specified"));
+        if (fieldValue("pcSpecs")) lines.push("Current PC: " + fieldValue("pcSpecs"));
+        lines.push("");
+        lines.push("Details:");
+        lines.push(fieldValue("details"));
+        if (extraContext) {
+          lines.push("");
+          lines.push("--- Attached from the site tools ---");
+          lines.push(extraContext);
+        }
+        return lines.join("\n");
+      }
+
+      function saveDraft() {
+        const draft = { at: Date.now() };
+        FORM_FIELDS.forEach(function (id) { draft[id] = $("#" + id).value; });
+        store.set("gfh.draft", draft);
+      }
+
+      function restoreDraft() {
+        const draft = store.get("gfh.draft", null);
+        if (!draft) return;
+        var restored = false;
+        FORM_FIELDS.forEach(function (id) {
+          if (typeof draft[id] === "string" && draft[id]) {
+            $("#" + id).value = draft[id];
+            if (id !== "preferredContact" && id !== "urgency") restored = true;
+          }
+        });
+        if (restored) toast("Draft restored from your last visit", "ok");
+      }
+
+      function clearDraft(silent) {
+        store.del("gfh.draft");
+        FORM_FIELDS.forEach(function (id) {
+          const el = $("#" + id);
+          if (el.tagName === "SELECT") el.selectedIndex = 0;
+          else el.value = "";
+          setError(id, false);
+        });
+        $("#sendActions").hidden = true;
+        $("#statusBox").classList.remove("is-visible");
+        preparedRequest = "";
+        extraContext = "";
+        if (!silent) toast("Draft cleared");
+      }
+
+      const TOOL_MARKER = "--- Generated by the site tools ---";
+
+      function fillRequestFrom(text, serviceName, message) {
+        extraContext = text;
+        const details = $("#details");
+        const base = details.value;
+        if (base.indexOf(TOOL_MARKER) !== -1) details.value = base.split(TOOL_MARKER)[0].trim();
+        details.value = (details.value.trim() ? details.value.trim() + "\n\n" : "") + TOOL_MARKER + "\n" + text;
+        if (serviceName) $("#service").value = serviceName;
+        setError("details", false);
+        setError("service", false);
+        saveDraft();
+        $("#booking").scrollIntoView({ behavior: "smooth", block: "start" });
+        toast(message || "Added to your request - review it and press send", "ok");
+      }
+
+      function printSheet(title, text) {
+        const host = $("#printArea");
+        host.innerHTML =
+          "<h1>" + esc(title) + "</h1>" +
+          '<div class="sheet-meta">GameFix Hub | ' + esc(BUSINESS_EMAIL) + " | WhatsApp +34 614 268 211 | " +
+          esc(new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })) + "</div>" +
+          "<pre>" + esc(text) + "</pre>";
+        window.print();
+      }
+
+      /* ---------------- accounts ----------------
+         The Supabase bridge lives in a module at the bottom of this file and
+         exposes itself as window.gfhAuth. Everything here degrades safely:
+         if it never loads, the panel says so and the form still hands the
+         request to email or WhatsApp.
+      ------------------------------------------- */
+      /* Deliberately not captured now: this script runs while the page is still
+         parsing, and the module that defines the bridge is deferred, so it does
+         not exist yet. init() reads it once the document is ready. */
+      var AUTH = null;
+      var authSession = null;
+      var authTab = "signin"; /* signin | signup | forgot, while signed out */
+
+      function accountEmail() {
+        return authSession && authSession.user && authSession.user.email ? authSession.user.email : "";
+      }
+
+      function setMessage(sel, text, kind) {
+        const el = $(sel);
+        if (!el) return;
+        el.textContent = text || "";
+        el.hidden = !text;
+        el.classList.remove("is-error", "is-ok", "is-warn");
+        if (text && kind) el.classList.add("is-" + kind);
+      }
+
+      function openAccount() {
+        if ($("#savedPanel").classList.contains("is-open")) closeSaved();
+        $("#accountPanel").classList.add("is-open");
+        $("#accountPanel").setAttribute("aria-hidden", "false");
+        $("#backdrop").classList.add("is-open");
+        $("#accountToggle").setAttribute("aria-expanded", "true");
+      }
+
+      function closeAccount() {
+        $("#accountPanel").classList.remove("is-open");
+        $("#accountPanel").setAttribute("aria-hidden", "true");
+        $("#backdrop").classList.remove("is-open");
+        $("#accountToggle").setAttribute("aria-expanded", "false");
+      }
+
+      function accountOpen() {
+        return $("#accountPanel").classList.contains("is-open");
+      }
+
+      /* Which of the four panels is showing: signin | signup | forgot | signedin | recovery */
+      function accountView(state) {
+        const signedOutState = state === "signin" || state === "signup" || state === "forgot";
+        if (signedOutState) authTab = state;
+        $("#acctSignedOut").hidden = !signedOutState;
+        $("#acctSignedIn").hidden = state !== "signedin";
+        $("#acctRecovery").hidden = state !== "recovery";
+        $("#signInForm").hidden = state !== "signin";
+        $("#signUpForm").hidden = state !== "signup";
+        $("#forgotForm").hidden = state !== "forgot";
+        $("#tabSignIn").setAttribute("aria-selected", String(state === "signin"));
+        $("#tabSignUp").setAttribute("aria-selected", String(state === "signup"));
+        $("#accountTitle").textContent = state === "signedin" ? "Your account" : (state === "recovery" ? "New password" : "Your account");
+        $("#accountSubtitle").textContent =
+          state === "signedin" ? "Your requests, all in one place"
+            : state === "recovery" ? "Choose a new password"
+              : state === "forgot" ? "Reset a forgotten password"
+                : "Sign in to keep every request in one place";
+        if (signedOutState) {
+          setMessage("#authMessage", "");
+          if (state === "signup") $("#signUpEmail").focus();
+          else if (state === "forgot") $("#forgotEmail").focus();
+          else $("#signInEmail").focus();
+        }
+      }
+
+      function renderAccount() {
+        const user = authSession && authSession.user;
+
+        if (!AUTH) {
+          accountView("signin");
+          ["#signInSubmit", "#signUpSubmit", "#forgotSubmit"].forEach(function (id) { $(id).disabled = true; });
+          setMessage("#authMessage", "Accounts are unavailable right now. You can still send a request - it will be prepared for email or WhatsApp.", "warn");
+        } else if (!AUTH.available && !AUTH.error) {
+          /* Still fetching the client library. Do not cry wolf yet. */
+          accountView("signin");
+          ["#signInSubmit", "#signUpSubmit", "#forgotSubmit"].forEach(function (id) { $(id).disabled = true; });
+          setMessage("#authMessage", "Connecting to the account service...", "");
+        } else if (!AUTH.available) {
+          accountView("signin");
+          ["#signInSubmit", "#signUpSubmit", "#forgotSubmit"].forEach(function (id) { $(id).disabled = true; });
+          setMessage("#authMessage", AUTH.error + " You can still send a request - it will be prepared for email or WhatsApp.", "warn");
+        } else {
+          $("#signInSubmit").disabled = false;
+          $("#signUpSubmit").disabled = false;
+          $("#forgotSubmit").disabled = false;
+          if (user) {
+            $("#acctEmail").textContent = user.email;
+            const created = user.created_at ? new Date(user.created_at) : null;
+            $("#acctSince").textContent = created
+              ? "Member since " + created.toLocaleDateString("en-GB", { month: "long", year: "numeric" })
+              : "Signed in";
+            accountView("signedin");
+            loadMyRequests();
+          } else {
+            accountView(authTab);
+          }
+        }
+
+        /* The badge counts the signed-in customer's own requests. */
+        const badge = $("#accountBadge");
+        badge.hidden = !user;
+        if (!user) {
+          badge.textContent = "0";
+          badge.setAttribute("data-empty", "true");
+        }
+        $("#accountToggle").setAttribute("aria-label", user ? "Your account, signed in as " + user.email : "Your account");
+        $("#accountHint").hidden = !user;
+        if (user) {
+          $("#accountHint").textContent = "Signed in as " + user.email + ". This request is saved to your account, so you can find it here later.";
+        }
+      }
+
+      function loadMyRequests() {
+        if (!AUTH || !AUTH.available || !authSession) return;
+        const host = $("#acctRequests");
+        host.innerHTML = '<p class="hint">Loading your requests...</p>';
+        AUTH.myEnquiries().then(function (rows) {
+          rows = rows || [];
+          const badge = $("#accountBadge");
+          badge.textContent = String(rows.length);
+          badge.setAttribute("data-empty", rows.length === 0 ? "true" : "false");
+          if (!rows.length) {
+            host.innerHTML = '<p class="hint">Nothing here yet. Requests you send while signed in will appear in this list.</p>';
+            return;
+          }
+          host.innerHTML = "";
+          rows.forEach(function (r) {
+            const when = new Date(r.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+            const body = String(r.message || "");
+            const row = document.createElement("div");
+            row.className = "request-row";
+            row.innerHTML =
+              '<div class="meta"><span class="ref">' + esc(r.reference) + "</span></div>" +
+              '<div class="meta">' + esc(when) + " &middot; " + esc(r.service) + " &middot; " +
+              '<span class="pill-status is-' + esc(r.status) + '">' + esc(r.status) + "</span></div>" +
+              '<div class="body">' + esc(body.slice(0, 160)) + (body.length > 160 ? "..." : "") + "</div>";
+            host.appendChild(row);
+          });
+        }, function (err) {
+          host.innerHTML = '<p class="hint">' + esc(err.message || "Could not load your requests.") + "</p>";
+        });
+      }
+
+      function authBusy(button, busy, label) {
+        const el = $(button);
+        if (!el) return;
+        if (busy) {
+          el.dataset.label = el.textContent;
+          el.textContent = label || "Working...";
+          el.disabled = true;
+        } else {
+          if (el.dataset.label) el.textContent = el.dataset.label;
+          el.disabled = false;
+        }
+      }
+
+      function initAccount() {
+        AUTH = window.gfhAuth || null;
+
+        if (!AUTH) {
+          $("#accountSubtitle").textContent = "Accounts unavailable";
+          renderAccount();
+          return;
+        }
+
+        /* The client library is fetched from a CDN after this point, so the
+           first render may happen before it is ready. Re-render when it lands. */
+        if (AUTH.ready && AUTH.ready.then) AUTH.ready.then(function () { renderAccount(); });
+
+        AUTH.onChange(function (session, event) {
+          const wasSignedIn = Boolean(authSession && authSession.user);
+          authSession = session || null;
+
+          if (event === "PASSWORD_RECOVERY") {
+            openAccount();
+            accountView("recovery");
+            $("#recoveryIntro").textContent = "You followed a reset link. Choose a new password for " + (accountEmail() || "your account") + ".";
+            setMessage("#recoveryMessage", "", "");
+            $("#newPassword").focus();
+            return;
+          }
+
+          renderAccount();
+
+          const nowSignedIn = Boolean(authSession && authSession.user);
+          if (!wasSignedIn && nowSignedIn && event === "SIGNED_IN") {
+            toast("Welcome back, " + accountEmail(), "ok");
+          }
+        });
+
+        $("#accountToggle").addEventListener("click", function () {
+          if (accountOpen()) closeAccount();
+          else openAccount();
+        });
+        $("#closeAccount").addEventListener("click", closeAccount);
+
+        $("#tabSignIn").addEventListener("click", function () { accountView("signin"); });
+        $("#tabSignUp").addEventListener("click", function () { accountView("signup"); });
+        $("#toForgot").addEventListener("click", function () { accountView("forgot"); });
+        $("#toSignIn").addEventListener("click", function () { accountView("signin"); });
+
+        /* sign in */
+        $("#signInForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          const email = $("#signInEmail").value.trim();
+          const password = $("#signInPassword").value;
+          if (!email || !password) { setMessage("#authMessage", "Enter your email and password.", "error"); return; }
+          authBusy("#signInSubmit", true, "Signing in...");
+          setMessage("#authMessage", "Signing you in...", "");
+          AUTH.signIn(email, password).then(function () {
+            authBusy("#signInSubmit", false);
+            $("#signInPassword").value = "";
+            setMessage("#authMessage", "");
+          }, function (err) {
+            authBusy("#signInSubmit", false);
+            setMessage("#authMessage", err.message || "Sign in failed.", "error");
+          });
+        });
+
+        /* create account */
+        $("#signUpForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          const email = $("#signUpEmail").value.trim();
+          const password = $("#signUpPassword").value;
+          if (!email) { setMessage("#authMessage", "Enter your email address.", "error"); return; }
+          if (password.length < 8) { setMessage("#authMessage", "Please choose a password of at least 8 characters.", "error"); return; }
+          authBusy("#signUpSubmit", true, "Creating...");
+          setMessage("#authMessage", "Creating your account...", "");
+          AUTH.signUp(email, password).then(function (result) {
+            authBusy("#signUpSubmit", false);
+            $("#signUpPassword").value = "";
+            if (result.session) {
+              setMessage("#authMessage", "Your account is ready. Welcome aboard.", "ok");
+            } else {
+              accountView("signin");
+              setMessage("#authMessage", "Almost there - I have emailed a confirmation link to " + email + ". Open it to activate your account, then sign in.", "ok");
+              toast("Check your inbox to confirm your account", "ok");
+            }
+          }, function (err) {
+            authBusy("#signUpSubmit", false);
+            setMessage("#authMessage", err.message || "Could not create the account.", "error");
+          });
+        });
+
+        /* forgot password */
+        $("#forgotForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          const email = $("#forgotEmail").value.trim();
+          if (!email) { setMessage("#authMessage", "Enter the email address on your account.", "error"); return; }
+          authBusy("#forgotSubmit", true, "Sending...");
+          AUTH.sendRecovery(email).then(function () {
+            authBusy("#forgotSubmit", false);
+            setMessage("#authMessage", "If " + email + " has an account, a reset link is on its way. It can take a minute or two - check your spam folder too.", "ok");
+            toast("Reset link requested", "ok");
+          }, function (err) {
+            authBusy("#forgotSubmit", false);
+            setMessage("#authMessage", err.message || "Could not send the reset email.", "error");
+          });
+        });
+
+        /* signed-in actions */
+        $("#acctRefresh").addEventListener("click", loadMyRequests);
+
+        $("#acctPassword").addEventListener("click", function () {
+          accountView("recovery");
+          $("#recoveryIntro").textContent = "Choose a new password for " + (accountEmail() || "your account") + ".";
+          setMessage("#recoveryMessage", "", "");
+          $("#newPassword").focus();
+        });
+
+        $("#acctSignOut").addEventListener("click", function () {
+          authBusy("#acctSignOut", true, "Signing out...");
+          AUTH.signOut().then(function () {
+            authBusy("#acctSignOut", false);
+            $("#acctRequests").innerHTML = "";
+            setMessage("#authMessage", "You are signed out. Your saved list and draft stay on this device.", "ok");
+            toast("Signed out");
+          }, function (err) {
+            authBusy("#acctSignOut", false);
+            setMessage("#accountMessage", err.message || "Could not sign out.", "error");
+          });
+        });
+
+        /* save a new password */
+        $("#saveNewPassword").addEventListener("click", function () {
+          const pw = $("#newPassword").value;
+          const pw2 = $("#newPassword2").value;
+          if (pw.length < 8) { setMessage("#recoveryMessage", "Please use at least 8 characters.", "error"); return; }
+          if (pw !== pw2) { setMessage("#recoveryMessage", "The two passwords do not match.", "error"); return; }
+          authBusy("#saveNewPassword", true, "Saving...");
+          AUTH.changePassword(pw).then(function () {
+            authBusy("#saveNewPassword", false);
+            $("#newPassword").value = "";
+            $("#newPassword2").value = "";
+            toast("Password updated", "ok");
+            renderAccount();
+            setMessage("#accountMessage", "Your password has been changed.", "ok");
+          }, function (err) {
+            authBusy("#saveNewPassword", false);
+            setMessage("#recoveryMessage", err.message || "Could not change the password.", "error");
+          });
+        });
+
+        $("#recoveryCancel").addEventListener("click", function () {
+          setMessage("#recoveryMessage", "", "");
+          if (authSession && authSession.user) renderAccount();
+          else accountView("signin");
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && accountOpen()) closeAccount();
+        });
+      }
+
+      /* ---------------- theme ---------------- */
+      const SUN = icon("sun");
+      const MOON = icon("moon");
+
+      function applyTheme(theme) {
+        const toggle = $("#themeToggle");
+        document.documentElement.setAttribute("data-theme", theme);
+        toggle.innerHTML = theme === "light" ? MOON : SUN;
+        toggle.setAttribute("aria-label", theme === "light" ? "Switch to dark theme" : "Switch to light theme");
+        store.set("gfh.theme", theme);
+      }
+
+      /* ---------------- scroll behaviour ---------------- */
+      function initScroll() {
+        const header = $("#siteHeader");
+        const progress = $("#progressBar");
+        const toTop = $("#toTop");
+        const navLinks = $$("#primaryNav a");
+        const sections = navLinks.map(function (a) { return $(a.getAttribute("href")); }).filter(Boolean);
+
+        function onScroll() {
+          const y = window.scrollY || document.documentElement.scrollTop;
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          progress.style.width = (max > 0 ? Math.min(100, (y / max) * 100) : 0) + "%";
+          header.classList.toggle("is-stuck", y > 8);
+          toTop.hidden = y < 500;
+
+          var active = null;
+          for (var i = 0; i < sections.length; i++) {
+            if (sections[i].getBoundingClientRect().top <= 140) active = sections[i].id;
+          }
+          navLinks.forEach(function (a) {
+            a.classList.toggle("is-active", a.getAttribute("href") === "#" + active);
+          });
+        }
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        onScroll();
+        toTop.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+      }
+
+      function initReveal() {
+        const items = $$(".reveal");
+        if (!items.length) return;
+        var revealed = 0;
+
+        /* the hidden state only exists after this line runs */
+        items.forEach(function (el) { el.classList.add("js-reveal"); });
+
+        function show(el) {
+          if (el.classList.contains("is-in")) return;
+          el.classList.add("is-in");
+          revealed++;
+        }
+
+        function revealVisible() {
+          const limit = window.innerHeight * 0.94;
+          items.forEach(function (el) {
+            if (!el.classList.contains("is-in") && el.getBoundingClientRect().top < limit) show(el);
+          });
+        }
+
+        revealVisible();
+        window.addEventListener("scroll", revealVisible, { passive: true });
+        window.addEventListener("resize", revealVisible);
+
+        if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                show(entry.target);
+                io.unobserve(entry.target);
+              }
+            });
+          }, { rootMargin: "0px 0px -8% 0px", threshold: .05 });
+          items.forEach(function (el) { io.observe(el); });
+        }
+
+        /* last resort so no section can stay invisible */
+        setTimeout(function () {
+          if (revealed === 0) items.forEach(show);
+        }, 3000);
+      }
+
+      /* ---------------- wiring ---------------- */
+      function init() {
+        /* theme */
+        const stored = store.get("gfh.theme", null);
+        const prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+        applyTheme(stored || (prefersLight ? "light" : "dark"));
+
+        $("#themeToggle").addEventListener("click", function () {
+          applyTheme(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light");
+        });
+
+        $("#year").textContent = new Date().getFullYear();
+
+        /* mobile nav */
+        const nav = $("#primaryNav");
+        const navToggle = $("#navToggle");
+        navToggle.addEventListener("click", function () {
+          const open = nav.classList.toggle("is-open");
+          navToggle.setAttribute("aria-expanded", String(open));
+        });
+        nav.addEventListener("click", function (e) {
+          if (e.target.closest("a")) {
+            nav.classList.remove("is-open");
+            navToggle.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        /* saved drawer */
+        $("#savedToggle").addEventListener("click", function () {
+          if ($("#savedPanel").classList.contains("is-open")) closeSaved();
+          else openSaved();
+        });
+        $("#closeSaved").addEventListener("click", closeSaved);
+        $("#backdrop").addEventListener("click", function () {
+          closeSaved();
+          closeAccount();
+        });
+
+        $("#clearSaved").addEventListener("click", function () {
+          savedCats.length = 0;
+          store.set("gfh.saved", savedCats);
+          renderParts();
+          renderSaved();
+          toast("Saved list cleared");
+        });
+
+        $("#savedToRequest").addEventListener("click", function () {
+          if (!savedCats.length) { toast("Your saved list is empty", "warn"); return; }
+          const lines = ["Saved component categories:"];
+          savedCats.forEach(function (cat) {
+            const p = savedCardFor(cat);
+            if (p) lines.push("- " + p.title + " (" + euro(p.from) + " - " + euro(p.to) + ") " + amazon(p.q));
+          });
+          const range = savedRange();
+          lines.push("Total planning range: " + euro(range.low) + " - " + euro(range.high));
+          closeSaved();
+          fillRequestFrom(lines.join("\n"), "Gaming PC Parts", "Saved list added to your request");
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            closeSaved();
+            nav.classList.remove("is-open");
+            navToggle.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        /* configurator */
+        /* ---- shareable plan links ----
+           The chosen budget, goal and priority live in the URL hash, so a plan
+           can be sent to a friend or pasted into a message. Nothing personal is
+           ever encoded - just the three planner choices.
+        ------------------------------- */
+        function planHash() {
+          const cfg = readConfigurator();
+          return "#plan=" + cfg.budget + "-" + cfg.useCase + "-" + cfg.profile;
+        }
+
+        function planUrl() {
+          return location.href.split("#")[0] + planHash();
+        }
+
+        function applyPlanFromUrl() {
+          const match = /[#&]plan=([^&]+)/.exec(location.hash || "");
+          if (!match) return false;
+          const bits = decodeURIComponent(match[1]).split("-");
+          const budget = parseInt(bits[0], 10);
+          if (!budget || budget < 400 || budget > 3500) return false;
+          $("#budgetRange").value = String(Math.min(3500, Math.max(400, Math.round(budget / 50) * 50)));
+          if (bits[1] && $("#useCase").querySelector('option[value="' + bits[1] + '"]')) $("#useCase").value = bits[1];
+          if (bits[2] && $("#profile").querySelector('option[value="' + bits[2] + '"]')) $("#profile").value = bits[2];
+          return true;
+        }
+
+        function syncPlanHash() {
+          try { history.replaceState(null, "", planHash()); } catch (e) { /* not allowed here */ }
+        }
+
+        /* A pasted link often changes only the hash, which does not reload the
+           page - so react here as well as on first paint. The site's own nav
+           anchors are ignored because they contain no plan=. */
+        window.addEventListener("hashchange", function () {
+          if (location.hash.indexOf("plan=") === -1) return;
+          if (applyPlanFromUrl()) {
+            runConfigurator(true);
+            toast("Build plan loaded from the link", "ok");
+          }
+        });
+
+        $("#budgetRange").addEventListener("input", function () { readConfigurator(); });
+        $("#budgetRange").addEventListener("change", function () { runConfigurator(true); syncPlanHash(); });
+        $("#useCase").addEventListener("change", function () { runConfigurator(true); syncPlanHash(); });
+        $("#profile").addEventListener("change", function () { runConfigurator(true); syncPlanHash(); });
+        $("#buildBtn").addEventListener("click", function () { runConfigurator(false); syncPlanHash(); });
+
+        $("#shareBuild").addEventListener("click", function () {
+          if (!currentBuild) runConfigurator(true);
+          syncPlanHash();
+          copyText(planUrl(), "Plan link");
+        });
+
+        $("#copyBuild").addEventListener("click", function () {
+          if (!currentBuild) runConfigurator(true);
+          copyText(buildToText(currentBuild), "Build plan");
+        });
+
+        $("#printBuild").addEventListener("click", function () {
+          if (!currentBuild) runConfigurator(true);
+          printSheet("PC build plan", buildToText(currentBuild));
+        });
+
+        $("#sendBuild").addEventListener("click", function () {
+          if (!currentBuild) runConfigurator(true);
+          fillRequestFrom(buildToText(currentBuild), "PC Building", "Build plan added to your request");
+        });
+
+        /* parts catalogue */
+        renderFilters();
+        renderParts();
+        renderSaved();
+        $("#partSearch").addEventListener("input", function (e) {
+          searchTerm = e.target.value;
+          renderParts();
+        });
+
+        document.addEventListener("keydown", function (e) {
+          const tag = document.activeElement ? document.activeElement.tagName : "";
+          if (e.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test(tag)) {
+            e.preventDefault();
+            $("#partSearch").focus();
+          }
+        });
+
+        /* any element with data-service pre-selects that service */
+        document.addEventListener("click", function (e) {
+          const trigger = e.target.closest("[data-service]");
+          if (!trigger) return;
+          $("#service").value = trigger.getAttribute("data-service");
+          setError("service", false);
+        });
+
+        /* compatibility checker */
+        initChecker();
+        $("#checkBtn").addEventListener("click", function () {
+          const set = runChecker();
+          const fails = set.results.filter(function (r) { return r.state === "bad"; }).length;
+          toast(fails
+            ? "Found " + fails + " blocking issue" + (fails > 1 ? "s" : "") + " - see the result panel"
+            : "All checks passed or flagged for review", fails ? "warn" : "ok");
+        });
+        $("#ccToRequest").addEventListener("click", function () {
+          fillRequestFrom(checkerToText(runChecker()), "Compatibility Check", "Compatibility result added to your request");
+        });
+        runChecker();
+
+        /* form */
+        restoreDraft();
+        const form = $("#bookingForm");
+        FORM_FIELDS.forEach(function (id) {
+          const el = $("#" + id);
+          el.addEventListener("input", function () {
+            saveDraft();
+            if (el.getAttribute("aria-invalid") === "true") {
+              const good = id === "details" ? el.value.trim().length >= 15 : !!el.value.trim();
+              if (good) setError(id, false);
+            }
+          });
+          el.addEventListener("change", saveDraft);
+        });
+
+        $("#clearDraft").addEventListener("click", function () { clearDraft(false); });
+
+        /* Switching back to email makes an empty phone number acceptable again. */
+        $("#preferredContact").addEventListener("change", function () {
+          if (!/whatsapp|phone/i.test(fieldValue("preferredContact"))) setError("customerPhone", false);
+        });
+
+        /* ---------------- delivery ----------------
+           The form posts to this site's own Worker at /api/enquiry. If that is
+           ever unreachable (opened from a file, static hosting with no backend,
+           offline, server error) the site degrades to the original behaviour:
+           the request is prepared in the page and handed to email or WhatsApp.
+           A failure is remembered, so we do not retry a dead endpoint on every
+           visit.
+        ------------------------------------------- */
+        const ENDPOINT = "/api/enquiry";
+        const SENT_KEY = "gfh.sent";
+        const MANUAL_KEY = "gfh.manual";
+        var submitting = false;
+
+        function prepareHandoffLinks() {
+          const service = fieldValue("service");
+          $("#emailLink").href = "mailto:" + BUSINESS_EMAIL +
+            "?subject=" + encodeURIComponent("GameFix Hub request: " + service) +
+            "&body=" + encodeURIComponent(preparedRequest);
+          $("#whatsappLink").href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(preparedRequest);
+          $("#printRequest").onclick = function () { printSheet("Service request", preparedRequest); };
+        }
+
+        function urgencyKey() {
+          const v = fieldValue("urgency");
+          if (/soon as possible/i.test(v)) return "urgent";
+          if (/this week/i.test(v)) return "soon";
+          return "standard";
+        }
+
+        function contactKey() {
+          const v = fieldValue("preferredContact");
+          if (/whatsapp/i.test(v)) return "whatsapp";
+          if (/phone/i.test(v)) return "phone";
+          return "email";
+        }
+
+        function attachedParts() {
+          const parts = [];
+          if (currentBuild) {
+            ORDER.forEach(function (k) {
+              parts.push({ category: LABELS[k], name: currentBuild.parts[k].n, price: currentBuild.parts[k].p });
+            });
+          }
+          savedCats.forEach(function (cat) {
+            const card = savedCardFor(cat);
+            if (card) parts.push({ category: cat + " shortlisted", name: card.title });
+          });
+          return parts.slice(0, 24);
+        }
+
+        function enquiryPayload() {
+          const specs = fieldValue("pcSpecs");
+          const details = fieldValue("details");
+          return {
+            name: fieldValue("customerName"),
+            email: fieldValue("customerEmail"),
+            phone: fieldValue("customerPhone"),
+            service: fieldValue("service"),
+            budget: fieldValue("budget"),
+            urgency: urgencyKey(),
+            contactBy: contactKey(),
+            message: specs ? details + "\n\nCurrent PC: " + specs : details,
+            buildSummary: extraContext ? extraContext.slice(0, 1200) : "",
+            parts: attachedParts(),
+            website: fieldValue("website")
+          };
+        }
+
+        function postEnquiry(payload) {
+          const controller = new AbortController();
+          const timer = setTimeout(function () { controller.abort(); }, 15000);
+          return fetch(ENDPOINT, {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+          }).then(function (res) {
+            clearTimeout(timer);
+            return res.json().catch(function () { return {}; }).then(function (data) {
+              if (!res.ok || !data.ok) {
+                const err = new Error(data.error || ("the server answered " + res.status));
+                err.status = res.status;
+                throw err;
+              }
+              return data;
+            });
+          }, function (err) {
+            clearTimeout(timer);
+            throw err;
+          });
+        }
+
+        function setBusy(busy) {
+          submitting = busy;
+          $("#submitRequest").disabled = busy;
+          $("#submitLabel").textContent = busy ? "Sending..." : "Send my request";
+        }
+
+        function showStatus(message, kind) {
+          const box = $("#statusBox");
+          box.textContent = message;
+          box.classList.remove("is-error", "is-busy");
+          if (kind) box.classList.add("is-" + kind);
+          box.classList.add("is-visible");
+        }
+
+        function showReceipt(id, emailed, service, via) {
+          $("#receiptRef").textContent = id;
+          $("#receiptMeta").textContent = "Sent " + new Date().toLocaleString("en-GB", {
+            day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
+          }) + "  |  " + esc(service || "Request") +
+            (via === "account" ? (accountEmail() ? "  |  saved to your account" : "  |  stored safely") : "");
+          $("#receiptEmailNote").hidden = !emailed;
+          $("#receipt").hidden = false;
+          $("#copyRef").onclick = function () { copyText(id, "Reference"); };
+        }
+
+        function loadLedger() {
+          const rows = store.get(SENT_KEY, []);
+          const wrap = $("#ledgerWrap");
+          const list = $("#ledger");
+          if (!rows.length) { wrap.hidden = true; return; }
+          wrap.hidden = false;
+          list.innerHTML = "";
+          rows.slice(0, 8).forEach(function (row) {
+            const el = document.createElement("div");
+            el.className = "ledger-row";
+            el.innerHTML = "<b>" + esc(row.id) + "</b><span style=\"color:var(--muted)\">" +
+              esc(row.service || "Request") + " · " + esc(new Date(row.at).toLocaleDateString("en-GB")) + "</span>";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "btn btn-ghost";
+            btn.style.padding = "6px 10px";
+            btn.style.fontSize = "12.5px";
+            btn.textContent = "Copy reference";
+            btn.addEventListener("click", function () { copyText(row.id, "Reference"); });
+            el.appendChild(btn);
+            list.appendChild(el);
+          });
+        }
+
+        function rememberSent(entry) {
+          const rows = store.get(SENT_KEY, []);
+          rows.unshift(entry);
+          store.set(SENT_KEY, rows.slice(0, 20));
+          loadLedger();
+        }
+
+        function fallbackToManual(reason) {
+          $("#sendActionsNote").textContent =
+            "Automatic delivery is unavailable (" + reason + "). Nothing is lost - send it yourself with one of these:";
+          $("#sendActions").hidden = false;
+          $("#sendActions").scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        /* The one route into the account database. Validation happens in the
+           database function, so its refusal is final: there is no point trying
+           a second backend with data the server has already rejected. */
+        function submitToSupabase(payload) {
+          if (!AUTH || !AUTH.configured) {
+            return Promise.reject(Object.assign(new Error("accounts are not set up on this site"), { status: 404 }));
+          }
+          return AUTH.ready.then(function () {
+            if (!AUTH.available) throw Object.assign(new Error(AUTH.error || "accounts are unavailable"), { status: 404 });
+            return AUTH.submitEnquiry({
+              name: payload.name,
+              email: payload.email,
+              phone: payload.phone,
+              service: payload.service,
+              budget: payload.budget,
+              urgency: payload.urgency,
+              contactBy: payload.contactBy,
+              message: payload.message,
+              buildSummary: payload.buildSummary,
+              parts: payload.parts
+            });
+          }).then(function (reference) {
+            return { reference: reference, via: "account", emailed: false };
+          }, function (err) {
+            /* A 400 from the database is a refusal and must not be retried
+               elsewhere; anything else means the account backend is out of
+               reach and the optional Worker deserves a try. */
+            if (err && err.status === 400) err.refusal = true;
+            throw err;
+          });
+        }
+
+        function deliver(payload) {
+          const workerPossible = !store.get(MANUAL_KEY, false);
+
+          return submitToSupabase(payload).catch(function (supaErr) {
+            if (supaErr && supaErr.refusal) throw supaErr;
+            if (!workerPossible) throw supaErr;
+            return postEnquiry(payload).then(function (data) {
+              return { reference: data.id, via: "worker", emailed: !!data.emailed };
+            }, function () {
+              throw supaErr;
+            });
+          });
+        }
+
+        function sendToBackend() {
+          const payload = enquiryPayload();
+
+          /* A field a real visitor never sees. Accept it silently so a bot
+             learns nothing, and store nothing. */
+          if (payload.website) {
+            showStatus("Thank you - your request is with me.");
+            toast("Request sent", "ok");
+            return;
+          }
+
+          if (!navigator.onLine) {
+            showStatus("You appear to be offline, so your request has been prepared below instead.", "error");
+            fallbackToManual("you are offline");
+            toast("Offline - send it manually", "warn");
+            return;
+          }
+
+          setBusy(true);
+          showStatus("Sending your request...", "busy");
+
+          deliver(payload).then(function (result) {
+            setBusy(false);
+            store.set(MANUAL_KEY, false);
+            // Read the service before clearing the form, and clear first:
+            // clearDraft() hides the status box, so it must not run last.
+            const service = fieldValue("service");
+            clearDraft(true);
+            showStatus(accountEmail()
+              ? "Thank you - your request is saved to your account. I usually reply within a few hours, sooner if you marked it urgent."
+              : "Thank you - your request is with me. I usually reply within a few hours, sooner if you marked it urgent.");
+            showReceipt(result.reference, !!result.emailed, service, result.via);
+            rememberSent({ id: result.reference, at: Date.now(), service: service });
+            toast("Request sent - reference " + result.reference, "ok");
+            // Keep the account panel in step, and nudge an anonymous visitor
+            // towards an account without blocking them.
+            if (result.via === "account" && authSession) loadMyRequests();
+            $("#receipt").scrollIntoView({ behavior: "smooth", block: "center" });
+          }, function (err) {
+            setBusy(false);
+            /* Only remember the failure when the endpoint itself is missing or
+               broken. A refusal on the merits (400/422/429) means the backend
+               is alive, so the next attempt should still try it. */
+            const status = err && err.status;
+            const endpointDead = err && err.name === "AbortError" || !status || status >= 500 || status === 404;
+            if (endpointDead) store.set(MANUAL_KEY, true);
+            const reason = err && err.name === "AbortError"
+              ? "the connection timed out"
+              : (err && err.message ? err.message : "the server could not be reached");
+            showStatus("Automatic delivery failed: " + reason + ". Your request is prepared below instead.", "error");
+            fallbackToManual(reason);
+            toast("Could not send automatically - use email or WhatsApp", "warn");
+          });
+        }
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (submitting) return;
+
+          if (!validateForm()) {
+            const firstBad = form.querySelector('[aria-invalid="true"]');
+            if (firstBad) firstBad.focus();
+            $("#statusBox").classList.remove("is-visible");
+            toast("Please fix the highlighted fields", "warn");
+            return;
+          }
+
+          preparedRequest = buildRequestText();
+          prepareHandoffLinks();
+          saveDraft();
+          sendToBackend();
+        });
+
+        $("#copyRequest").addEventListener("click", function () {
+          if (!preparedRequest) { toast("Prepare the request first", "warn"); return; }
+          copyText(preparedRequest, "Request");
+        });
+
+        /* first paint */
+        initAccount();
+        loadLedger();
+        const linkedPlan = applyPlanFromUrl();
+        runConfigurator(true);
+        if (linkedPlan) {
+          syncPlanHash();
+          document.getElementById("configurator").scrollIntoView({ behavior: "smooth", block: "start" });
+          toast("Build plan restored from the shared link", "ok");
+        }
+        initScroll();
+        initReveal();
+      }
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+      else init();
+    })();
+  </script>
+
+  <!-- ==============================================================
+       ACCOUNT + DATABASE BRIDGE (Supabase)
+
+       This is a module purely so it can pull the official client
+       library from a CDN. It does not block the page: the site is
+       interactive immediately and the account panel reports its own
+       availability. If the library cannot be fetched the rest of the
+       site is unaffected and the form falls back to email/WhatsApp.
+
+       Both values below are public and safe to ship in a web page.
+       The database password and the service_role key are NOT here and
+       must never be: they belong only in server-side secrets.
+       ============================================================== -->
+  <script type="module">
+    const SUPABASE_URL = "https://mggokcssqghstlypdoub.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_vsVlCV8DXMm32QTLP366lA_Y708dp34";
+    const LIBRARY = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/+esm";
+
+    /* Supabase talks about machinery; visitors talk about what happened. */
+    function friendly(error) {
+      const raw = String((error && (error.message || error.error_description)) || "").toLowerCase();
+      if (!raw) return "Something went wrong. Please try again.";
+      if (raw.includes("invalid login credentials")) return "That email and password do not match. Check them and try again.";
+      if (raw.includes("email not confirmed")) return "Please confirm your email address first - the link is in your inbox.";
+      if (raw.includes("already registered") || raw.includes("already been registered")) return "That email already has an account. Use Sign in instead.";
+      if (raw.includes("email rate limit") || raw.includes("over_email_send_rate_limit")) return "Too many emails have been sent recently. Please wait a little, or message me on WhatsApp.";
+      if (raw.includes("rate limit")) return "Too many attempts. Please wait a minute and try again.";
+      if (raw.includes("password should be at least")) return "Please choose a longer password - at least 8 characters.";
+      if (raw.includes("unable to validate email") || raw.includes("email_address_invalid") || raw.includes("is invalid")) return "That email address cannot be used. Please check it.";
+      if (raw.includes("signups not allowed")) return "New sign-ups are switched off for this site.";
+      if (raw.includes("failed to fetch") || raw.includes("network")) return "The account service could not be reached. Check your connection and try again.";
+      return (error && (error.message || error.error_description)) || "Something went wrong. Please try again.";
+    }
+
+    const bridge = {
+      configured: Boolean(SUPABASE_URL && SUPABASE_KEY),
+      available: false,
+      client: null,
+      session: null,
+      event: "",
+      error: "",
+      friendly: friendly,
+      ready: null,
+      _listeners: new Set(),
+      onChange: function (fn) {
+        bridge._listeners.add(fn);
+        fn(bridge.session, bridge.event);
+        return function () { bridge._listeners.delete(fn); };
+      },
+      _emit: function () {
+        bridge._listeners.forEach(function (fn) {
+          try { fn(bridge.session, bridge.event); } catch (e) { /* a bad listener must not break the rest */ }
+        });
+      },
+      pageUrl: function () {
+        return location.origin + location.pathname;
+      },
+    };
+
+    bridge.ready = (async function () {
+      if (!bridge.configured) {
+        bridge.error = "Accounts are not configured for this site.";
+        return null;
+      }
+      try {
+        const { createClient } = await import(LIBRARY);
+        const client = createClient(SUPABASE_URL, SUPABASE_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            /* reads the confirmation and recovery links Supabase emails out */
+            detectSessionInUrl: true,
+          },
+        });
+        bridge.client = client;
+        bridge.available = true;
+
+        client.auth.onAuthStateChange(function (event, session) {
+          bridge.session = session;
+          bridge.event = event;
+          bridge._emit();
+        });
+
+        const current = await client.auth.getSession();
+        bridge.session = current && current.data ? current.data.session : null;
+        bridge._emit();
+        return client;
+      } catch (err) {
+        bridge.error = "The account service could not be loaded.";
+        console.error("Supabase client failed to load:", err);
+        return null;
+      }
+    })();
+
+    const authed = async function () {
+      await bridge.ready;
+      if (!bridge.client) throw Object.assign(new Error(bridge.error), { status: 404 });
+      return bridge.client;
+    };
+
+    const unwrap = function (result) {
+      if (result && result.error) throw Object.assign(new Error(friendly(result.error)), { status: 400, detail: result.error });
+      return result ? result.data : null;
+    };
+
+    bridge.signUp = async function (email, password) {
+      const client = await authed();
+      const res = await client.auth.signUp({
+        email: email,
+        password: password,
+        options: { emailRedirectTo: bridge.pageUrl() },
+      });
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return { user: res.data.user, session: res.data.session };
+    };
+
+    bridge.signIn = async function (email, password) {
+      const client = await authed();
+      const res = await client.auth.signInWithPassword({ email: email, password: password });
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return res.data;
+    };
+
+    bridge.sendRecovery = async function (email) {
+      const client = await authed();
+      const res = await client.auth.resetPasswordForEmail(email, { redirectTo: bridge.pageUrl() });
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return true;
+    };
+
+    bridge.changePassword = async function (password) {
+      const client = await authed();
+      const res = await client.auth.updateUser({ password: password });
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return res.data.user;
+    };
+
+    bridge.signOut = async function () {
+      const client = await authed();
+      await client.auth.signOut();
+      return true;
+    };
+
+    /* Server-validated insert. Returns the reference the database assigned. */
+    bridge.submitEnquiry = async function (d) {
+      const client = await authed();
+      const res = await client.rpc("submit_enquiry", {
+        p_name: d.name,
+        p_email: d.email,
+        p_service: d.service,
+        p_message: d.message,
+        p_phone: d.phone || null,
+        p_budget: d.budget || null,
+        p_urgency: d.urgency || "standard",
+        p_contact_by: d.contactBy || "email",
+        p_build_summary: d.buildSummary || null,
+        p_parts: d.parts && d.parts.length ? d.parts : null,
+      });
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return res.data;
+    };
+
+    /* Row level security means this can only ever return the caller's own rows. */
+    bridge.myEnquiries = async function () {
+      const client = await authed();
+      const res = await client
+        .from("enquiries")
+        .select("reference,created_at,service,status,urgency,message")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return res.data || [];
+    };
+
+    window.gfhAuth = bridge;
+  </script>
+</body>
+</html>

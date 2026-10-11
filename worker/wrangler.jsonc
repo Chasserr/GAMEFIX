@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gamefix-hub",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gamefix-hub",
+      // Local development works with this placeholder. Before your first
+      // `npm run deploy`, run: npx wrangler d1 create gamefix-hub
+      // and paste the real id it prints here.
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  // Public, non-secret settings. Secrets (ADMIN_TOKEN, RESEND_API_KEY) go in
+  // .dev.vars locally and in `wrangler secret put` for production - never here.
+  "vars": {
+    "MAIL_FROM": "GameFix Hub <onboarding@resend.dev>",
+    "MAIL_TO": "meshackosei50@gmail.com"
+  }
+}

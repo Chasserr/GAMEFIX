@@ -1,0 +1,16 @@
+{
+  "name": "gamefix-hub-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Worker backend for GameFix Hub: request intake, D1 storage, Resend notifications and an owner dashboard.",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "test:api": "node test-api.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.149.0"
+  }
+}

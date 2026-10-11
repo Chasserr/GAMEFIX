@@ -1,0 +1,5 @@
+node_modules/
+.dev.vars
+.wrangler/
+public/
+_npm-install.log

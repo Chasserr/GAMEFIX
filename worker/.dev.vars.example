@@ -1,0 +1,11 @@
+# Copy this file to ".dev.vars" and fill in your own values.
+# ".dev.vars" is gitignored and is only used by "wrangler dev" on your machine.
+# Never commit it and never paste these values into a chat window.
+
+# Admin token for /dashboard. Make up a long random string, e.g. from a
+# password manager. Anyone with this token can read every request.
+ADMIN_TOKEN=change-me-to-a-long-random-string
+
+# Resend API key from https://resend.com/api-keys
+# Leave empty to store requests without sending an email.
+RESEND_API_KEY=
