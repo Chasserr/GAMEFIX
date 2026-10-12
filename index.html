@@ -1321,6 +1321,26 @@
     .auth-msg.is-ok { border-color: rgba(52, 211, 153, .45); background: rgba(52, 211, 153, .1); }
     .auth-msg.is-warn { border-color: rgba(251, 191, 36, .5); background: rgba(251, 191, 36, .1); }
 
+    /* The way forward offered next to a message, when the usual route (email)
+       cannot carry the visitor any further. */
+    .auth-alt {
+      margin-top: 8px;
+      padding: 10px 13px;
+      border-radius: 10px;
+      border: 1px dashed var(--line);
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .auth-alt[hidden] { display: none; }
+
+    .auth-alt a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
     .account-identity {
       display: flex;
       gap: 12px;
@@ -2748,6 +2768,7 @@
         </form>
 
         <p class="auth-msg" id="authMessage" role="status" aria-live="polite" hidden></p>
+        <p class="auth-alt" id="authAlternative" role="status" aria-live="polite" hidden></p>
       </div>
 
       <!-- signed in -->
@@ -3619,6 +3640,33 @@
         el.hidden = !text;
         el.classList.remove("is-error", "is-ok", "is-warn");
         if (text && kind) el.classList.add("is-" + kind);
+        /* The fallback only ever belongs to the message printed beside it, so
+           a new (or cleared) message always takes the old one away. */
+        if (sel === "#authMessage") setAlternative("");
+      }
+
+      /* When email cannot carry the visitor any further, the panel must not
+         leave them with nothing to do. This offers the route that always
+         works: reaching me without an account. */
+      function setAlternative(text) {
+        const el = $("#authAlternative");
+        if (!el) return;
+        if (!text) {
+          el.hidden = true;
+          el.innerHTML = "";
+          return;
+        }
+        el.innerHTML = esc(text) +
+          ' <a href="https://wa.me/' + WHATSAPP_NUMBER + '" target="_blank" rel="noopener noreferrer">Message me on WhatsApp</a>';
+        el.hidden = false;
+      }
+
+      /* True when the failure was email that could not be sent, rather than
+         anything the visitor typed. The bridge keeps the raw Supabase error
+         on `detail`, which is what carries the error code. */
+      function emailUnavailable(err) {
+        const probe = err && err.detail ? err.detail : err;
+        return Boolean(AUTH && typeof AUTH.emailUnavailable === "function" && AUTH.emailUnavailable(probe));
       }
 
       function openAccount() {
@@ -4241,12 +4289,18 @@
               setMessage("#authMessage", "Your account is ready. Welcome aboard.", "ok");
             } else {
               accountView("signin");
-              setMessage("#authMessage", "Almost there - I have emailed a confirmation link to " + email + ". Open it to activate your account, then sign in.", "ok");
+              setMessage("#authMessage", "Almost there - I have emailed a confirmation link to " + email + ". Open it to activate your account, then sign in. Have a look in your spam folder before assuming it has gone astray.", "ok");
+              /* Delivery is best-effort, so never let this be a dead end. */
+              setAlternative("No email after a few minutes? Email may not be switched on yet - you can still reach me without an account.");
               toast("Check your inbox to confirm your account", "ok");
             }
           }, function (err) {
             authBusy("#signUpSubmit", false);
             setMessage("#authMessage", err.message || "Could not create the account.", "error");
+            if (emailUnavailable(err)) {
+              setAlternative("You do not need an account to reach me - send a request with the form, or message me directly.");
+              toast("Could not send the confirmation email", "warn");
+            }
           });
         });
 
@@ -4259,10 +4313,15 @@
           AUTH.sendRecovery(email).then(function () {
             authBusy("#forgotSubmit", false);
             setMessage("#authMessage", "If " + email + " has an account, a reset link is on its way. It can take a minute or two - check your spam folder too.", "ok");
+            setAlternative("No email after a few minutes? Email may not be switched on yet - message me and I will help you back in.");
             toast("Reset link requested", "ok");
           }, function (err) {
             authBusy("#forgotSubmit", false);
             setMessage("#authMessage", err.message || "Could not send the reset email.", "error");
+            if (emailUnavailable(err)) {
+              setAlternative("Send me a request without an account, or message me on WhatsApp, and I will help you back in.");
+              toast("Could not send the reset email", "warn");
+            }
           });
         });
 
@@ -4921,13 +4980,41 @@
     const LIBRARY = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/+esm";
 
     /* Supabase talks about machinery; visitors talk about what happened. */
+
+    /* Every failure that really means "no email reached you": the built-in
+       mailer refusing a recipient it is not allowed to write to, a transport
+       that could not send, or the hourly cap. Recognised in one place so the
+       panel can be honest about it and offer a way forward. */
+    function emailUnavailable(error) {
+      if (!error) return false;
+      const raw = [error.message, error.error_description, error.code, error.error_code, error.name]
+        .map(function (v) { return String(v || "").toLowerCase(); })
+        .join(" ");
+      return raw.includes("email address not authorized") ||
+        raw.includes("email_address_not_authorized") ||
+        raw.includes("error sending confirmation email") ||
+        raw.includes("error sending recovery email") ||
+        raw.includes("error sending magic link email") ||
+        raw.includes("error sending email") ||
+        raw.includes("email rate limit") ||
+        raw.includes("over_email_send_rate_limit");
+    }
+
+    /* Saying "check your inbox" when nothing can be delivered is what leaves
+       somebody stranded, so neither of these pretends the mail was sent. */
+    const EMAIL_DOWN_MESSAGE = "I cannot send email from this site yet, so confirmation and reset links do not work. You do not need an account to reach me - send a request with the form, or message me on WhatsApp.";
+    const EMAIL_RATE_MESSAGE = "Too many emails have been requested recently, so this one was not sent. Please wait a little and try again - or message me on WhatsApp.";
+
     function friendly(error) {
       const raw = String((error && (error.message || error.error_description)) || "").toLowerCase();
+      const code = String((error && (error.code || error.error_code)) || "").toLowerCase();
+      if (emailUnavailable(error)) {
+        return (raw.includes("rate limit") || code.includes("rate")) ? EMAIL_RATE_MESSAGE : EMAIL_DOWN_MESSAGE;
+      }
       if (!raw) return "Something went wrong. Please try again.";
       if (raw.includes("invalid login credentials")) return "That email and password do not match. Check them and try again.";
-      if (raw.includes("email not confirmed")) return "Please confirm your email address first - the link is in your inbox.";
+      if (raw.includes("email not confirmed")) return "Please confirm your email address first - the link is in your inbox. If it never arrived, email is not switched on for this site yet, and you can still send me a request without an account.";
       if (raw.includes("already registered") || raw.includes("already been registered")) return "That email already has an account. Use Sign in instead.";
-      if (raw.includes("email rate limit") || raw.includes("over_email_send_rate_limit")) return "Too many emails have been sent recently. Please wait a little, or message me on WhatsApp.";
       if (raw.includes("rate limit")) return "Too many attempts. Please wait a minute and try again.";
       if (raw.includes("password should be at least")) return "Please choose a longer password - at least 8 characters.";
       if (raw.includes("unable to validate email") || raw.includes("email_address_invalid") || raw.includes("is invalid")) return "That email address cannot be used. Please check it.";
@@ -4944,6 +5031,7 @@
       event: "",
       error: "",
       friendly: friendly,
+      emailUnavailable: emailUnavailable,
       ready: null,
       _listeners: new Set(),
       onChange: function (fn) {
