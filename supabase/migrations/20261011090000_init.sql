@@ -62,9 +62,11 @@ create policy "customers read their own enquiries"
   to authenticated
   using (auth.uid() = user_id);
 
--- Do not rely on RLS alone: remove the table privileges too.
+-- Do not rely on RLS alone: remove the table privileges too. Supabase grants
+-- broadly to these roles, so every privilege other than the one read policy
+-- needs revoking explicitly - including TRIGGER, which is easy to overlook.
 revoke all on public.enquiries from anon;
-revoke insert, update, delete, truncate, references on public.enquiries from authenticated;
+revoke insert, update, delete, truncate, references, trigger on public.enquiries from authenticated;
 grant  select on public.enquiries to authenticated;
 
 -- ================================================ submission function =======
