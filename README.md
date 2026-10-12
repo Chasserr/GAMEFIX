@@ -120,14 +120,43 @@ Actions**, then add the resulting URL to the Supabase redirect list (step 3).
 
 ## Tests
 
-There is no test runner to install. Verification here is done against the live
-project:
+Verification here runs against the live project rather than mocks.
+
+### Accounts, sign-in and data isolation (26 checks)
+
+```bash
+cd supabase
+npm install
+SUPABASE_DB_URL="postgresql://postgres:<your-database-password>@db.<project-ref>.supabase.co:5432/postgres" npm run verify
+```
+
+`supabase/verify-auth.mjs` signs in, rejects wrong passwords and unknown
+accounts, submits a request as a signed-in customer, proves a second account
+cannot see the first account's requests, requests a password reset, sets a new
+password and signs out. It creates its own test accounts, removes them again,
+and refuses to touch anything outside `@gfh-verify.dev`.
+
+> The connection string is a secret. Pass it in the environment only. Getting
+> it: Supabase dashboard → Settings → Database → Connection string (URI).
+
+The one step it cannot do is click the confirmation link in an email, so it
+creates its confirmed account directly in the database. That is test-only code -
+application code must use the sign-up endpoint.
+
+If the suite reports `NOT SENT - over_email_send_limit`, SMTP is not connected
+yet (step 4 above).
+
+### The optional notifier
 
 - `worker/test-api.mjs` exercises the optional Cloudflare notifier (42 checks).
-- The website itself was verified in a browser: signing up, signing in, wrong
-  passwords, the forgot-password request, submitting a request end to end
-  through the database function, and confirming that a second account cannot
-  see the first account's requests.
+
+### The site
+
+The page itself was driven in a real browser against a plain static server (the
+shape GitHub Pages serves): creating an account, signing in, the forgot-password
+form, submitting a request end to end and seeing it appear under **Your
+requests**, and signing out - with a clean console apart from the deliberate
+rejections.
 
 ## If a key is ever exposed
 
