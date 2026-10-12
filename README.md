@@ -7,8 +7,9 @@ framework, no dependency to install. Supabase supplies the accounts and the
 database.
 
 ```
-index.html                   the entire website
+index.html                   the entire website, admin panel included
 supabase/migrations/         database schema, policies and validation
+supabase/verify-*.mjs        live checks for accounts and admin access
 worker/                      optional Cloudflare notifier (not required)
 .github/workflows/pages.yml  publishes the site on every push
 ```
@@ -19,6 +20,22 @@ worker/                      optional Cloudflare notifier (not required)
 - Send a request as a guest, or create an account first.
 - With an account: sign up, sign in, reset a forgotten password, see every
   request they have sent, and change their password.
+
+## What the owner can do
+
+A full-screen admin panel, opened from the account panel and visible only to an
+account listed in `public.admins` (see below):
+
+- Every customer request in one list, newest first, with a live summary strip
+  (total, unread, urgent, won, last seven days, how many came from accounts).
+- Search across name, email, reference and the message itself, and filter by
+  status, urgency and age. Archived requests are hidden until asked for.
+- A detail pane with the full message, the attached build plan, contact links
+  (email, `tel:`, WhatsApp) and whether the sender had an account.
+- A status workflow - new, read, replied, won, archived - plus private notes,
+  and "mark shown as read" to clear a batch in one go.
+- Export the current filter to a spreadsheet.
+- Delete a request, behind a confirmation.
 
 ## Setup
 
@@ -44,8 +61,11 @@ supabase link --project-ref <your-project-ref>
 supabase db push
 ```
 
-Or paste `supabase/migrations/20261011090000_init.sql` into the SQL editor. It
-is additive and idempotent, so running it twice is harmless.
+That applies both files in `supabase/migrations/`: `..._init.sql` (the enquiries
+table, its policies and `submit_enquiry()`) and `..._admin.sql` (the admins
+table, `is_admin()`, and the wider rules they unlock). Paste them into the SQL
+editor in that order if you prefer. Both are additive and idempotent, so running
+them twice is harmless.
 
 ### 3. Allow your own URL (do not skip this)
 
@@ -69,6 +89,27 @@ password reset emails will fail** for real customers, and Supabase returns
 into a plain-English message rather than a raw error, but the fix is to connect
 SMTP.
 
+## Becoming an admin
+
+Membership is a row in `public.admins`, and only you can add one - the table
+has no policies and no privileges for the browser, so the panel cannot promote
+anyone, not even itself. Sign up normally first, confirm your email, then run
+this once in the Supabase SQL editor (replace the address):
+
+```sql
+insert into public.admins (user_id, label)
+select id, 'Mesha' from auth.users where email = 'you@example.com'
+on conflict (user_id) do nothing;
+```
+
+To remove someone, or yourself: `delete from public.admins where user_id =
+(select id from auth.users where email = 'you@example.com');`
+
+Access is read per query, so removing a row takes effect on the next click -
+there is no session to wait out and nothing to sign out of. Sign out and back
+in after adding yourself, and **Open admin panel** appears in your account
+panel.
+
 ## Security model
 
 Everything the browser can do is decided by the database, not by the page. It
@@ -77,8 +118,9 @@ is worth knowing exactly what is exposed:
 | Who | Can do |
 | --- | --- |
 | Anyone (no account) | Submit a request through `submit_enquiry()`. Nothing else. |
-| Signed-in customer | The above, plus read **their own** requests. |
-| Nobody with the publishable key | Read anyone else's request, change or delete anything, or write to `enquiries` directly. |
+| Signed-in customer | The above, plus read **their own** requests. Cannot edit or delete anything - not even their own rows. |
+| Admin | Read every request, move it through the workflow, leave a note, delete it. Still cannot rewrite what a customer wrote. |
+| Nobody with the publishable key | Read anyone else's request, alter the content of a request, or add themselves to `admins`. |
 | You, with the `service_role` key | Everything, including the Supabase Table Editor. |
 
 The specifics:
@@ -94,6 +136,17 @@ The specifics:
   length, email shape, message length, urgency, reply method - and normalises
   what it stores. A caller cannot attach a request to somebody else's account:
   `user_id` comes from `auth.uid()`, never from the request.
+- `admins` holds one row per admin account, has RLS enabled with **no
+  policies at all**, and no table privileges for `anon` or `authenticated`.
+  The only way to read it is `is_admin()`, which answers solely about the caller.
+- Admin writes are checked twice: the `UPDATE` privilege is granted on the
+  `status` and `notes` columns only, so the message, email, phone and budget a
+  customer supplied cannot be edited from a browser; and the update policy
+  requires `is_admin()`. A customer calling the same endpoint updates zero rows.
+- `enquiry_stats` is a view, and a Postgres view normally runs with the
+  privileges of its owner - which would leak every customer's totals to anyone
+  signed in. It is set to `security_invoker = true` so the row level security
+  above decides what each person counts.
 - The function also throttles: at most 5 requests per email address per hour.
 - The site never stores a password, token or key in `localStorage`. Supabase
   manages the session; only the site's own draft, saved list and request history
@@ -121,6 +174,21 @@ Actions**, then add the resulting URL to the Supabase redirect list (step 3).
 ## Tests
 
 Verification here runs against the live project rather than mocks.
+
+### Admin access (30 checks)
+
+```bash
+cd supabase
+SUPABASE_DB_URL="postgresql://postgres:<your-database-password>@db.<project-ref>.supabase.co:5432/postgres" npm run verify:admin
+```
+
+`supabase/verify-admin.mjs` tests the rules as the attacker rather than as the
+intended user: an anonymous visitor, then a signed-in customer who tries to read
+somebody else's request, change its status, delete it, rewrite its message, and
+promote themselves to admin - and finally the same account after being added to
+`public.admins`, then after being removed again. It confirms each refusal
+against the database rather than trusting the HTTP status, because a request
+blocked by row level security still answers `204`.
 
 ### Accounts, sign-in and data isolation (26 checks)
 

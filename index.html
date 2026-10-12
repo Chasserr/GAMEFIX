@@ -1387,8 +1387,265 @@
     .pill-status.is-won { border-color: rgba(52, 211, 153, .5); color: #6ee7b7; }
     .pill-status.is-new { border-color: rgba(34, 211, 238, .5); color: var(--accent); }
 
+    /* ---------------- admin panel ---------------- */
+
+    /* A full-screen surface rather than a drawer: triage wants width. Colour,
+       radius and spacing all come from the tokens the rest of the site uses. */
+    .admin {
+      position: fixed;
+      inset: 0;
+      /* The landing-page rule `section { padding: 84px 0 }` also matches this
+         element, which would float the bar 84px down inside the viewport. */
+      padding: 0;
+      margin: 0;
+      /* Above the sticky site header (100), the drawer (140) and its backdrop
+         (130), but below the toasts (160) so that they stay readable over the
+         panel, and below the skip link (200). */
+      z-index: 145;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .admin[hidden] { display: none; }
+
+    .admin-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-soft);
+    }
+
+    .admin-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .admin-brand .icon { color: var(--accent); }
+    .admin-brand strong { font-family: var(--font-display); font-size: 16px; letter-spacing: -.01em; }
+    .admin-brand .who { font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .admin-bar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .admin-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .04);
+      color: var(--text);
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .admin-btn:hover { border-color: var(--line-strong); background: rgba(255, 255, 255, .07); }
+    .admin-btn:disabled { opacity: .5; cursor: default; }
+    .admin-btn.is-danger { color: #fca5a5; border-color: rgba(248, 113, 113, .4); }
+    .admin-btn.is-danger:hover { background: rgba(248, 113, 113, .12); }
+
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      padding: 14px 18px 0;
+    }
+
+    .admin-stat {
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+    }
+
+    .admin-stat b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+
+    .admin-stat span { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .admin-stat.is-alert b { color: var(--accent); }
+
+    .admin-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 14px 18px;
+    }
+
+    .admin-tools input,
+    .admin-tools select {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--input-bg, rgba(255, 255, 255, .04));
+      color: var(--text);
+      font: inherit;
+      font-size: 13.5px;
+    }
+
+    .admin-tools input { flex: 1 1 240px; min-width: 180px; }
+    .admin-tools input:focus,
+    .admin-tools select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .admin-tools .grow { flex: 1 1 0; }
+
+    .admin-body {
+      flex: 1 1 auto;
+      display: grid;
+      grid-template-columns: minmax(280px, 400px) minmax(0, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--line);
+      min-height: 0;
+    }
+
+    .admin-list {
+      overflow-y: auto;
+      border-right: 1px solid var(--line);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .admin-item {
+      display: grid;
+      gap: 5px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .02);
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .admin-item:hover { border-color: var(--line-strong); background: rgba(255, 255, 255, .05); }
+    .admin-item[aria-selected="true"] { border-color: var(--accent); box-shadow: var(--glow); }
+    .admin-item.is-unread { border-left: 3px solid var(--accent); }
+
+    /* min-width:0 on the flex rows, and a truncating snippet, so a long message
+       can never push the list into horizontal scroll. */
+    .admin-item .line1 { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; min-width: 0; }
+    .admin-item .ref { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px; color: var(--accent); }
+    .admin-item .who { font-weight: 650; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .admin-item .snip {
+      font-size: 12.5px;
+      color: var(--muted);
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .admin-item .when { font-size: 11.5px; color: var(--muted); white-space: nowrap; flex: 0 0 auto; }
+
+    .admin-detail {
+      overflow-y: auto;
+      padding: 18px;
+      min-height: 0;
+    }
+
+    .admin-detail .back { display: none; }
+    .admin-empty { padding: 40px 20px; text-align: center; color: var(--muted); }
+    .admin-empty .icon { width: 30px; height: 30px; opacity: .6; }
+
+    .admin-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .admin-card h3 {
+      margin: 0 0 10px;
+      font-family: var(--font-display);
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+
+    .admin-head .ref {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+
+    .admin-pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+    .admin-pairs .k { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .admin-pairs .v { font-size: 14.5px; word-break: break-word; }
+    .admin-pairs a { color: var(--accent); text-decoration: none; }
+    .admin-pairs a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    .admin-message {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .02);
+      font-size: 14.5px;
+      line-height: 1.55;
+    }
+
+    .admin-row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+
+    .admin-field { display: grid; gap: 6px; }
+    .admin-field label { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+
+    .admin-field select,
+    .admin-field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--input-bg, rgba(255, 255, 255, .04));
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+    }
+
+    .admin-field textarea { min-height: 78px; resize: vertical; }
+    .admin-field select:focus,
+    .admin-field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .admin-table th { text-align: left; font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line); }
+    .admin-table td { padding: 7px 8px; border-bottom: 1px solid rgba(31, 47, 74, .6); }
+    .admin-table td:last-child { text-align: right; white-space: nowrap; }
+
+    .admin-msg { margin-top: 12px; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--line); font-size: 13.5px; }
+    .admin-msg[hidden] { display: none; }
+    .admin-msg.is-error { border-color: rgba(248, 113, 113, .5); background: rgba(248, 113, 113, .1); }
+    .admin-msg.is-ok { border-color: rgba(52, 211, 153, .45); background: rgba(52, 211, 153, .1); }
+
+    .admin-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+    @media (max-width: 900px) {
+      .admin-body { grid-template-columns: 1fr; }
+      .admin-list { border-right: 0; }
+      /* One pane at a time on a phone, so the detail is never below 200 rows. */
+      .admin.is-detail .admin-list { display: none; }
+      .admin:not(.is-detail) .admin-detail { display: none; }
+      .admin-detail .back { display: inline-flex; margin-bottom: 12px; }
+    }
+
     @media print {
-      .honeypot, .receipt, #accountPanel { display: none !important; }
+      .honeypot, .receipt, #accountPanel, #adminPanel { display: none !important; }
     }
 
     /* ============================================================
@@ -1704,6 +1961,11 @@
     <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10" /><path d="M7 17 17 7" /></symbol>
     <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5" /><path d="M12 15V3" /></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /><path d="M3 21v-5h5" /></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></symbol>
+    <symbol id="i-badge-check" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /><path d="m9 12 2 2 4-4" /></symbol>
     <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
     <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></symbol>
     <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></symbol>
@@ -2504,6 +2766,11 @@
         </div>
         <div class="ledger" id="acctRequests"></div>
 
+        <!-- Shown only when the database says this account is an admin. -->
+        <button class="btn btn-ghost btn-block" type="button" id="adminOpen" style="margin-top:18px" hidden>
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-badge-check"></use></svg>
+          Open admin panel
+        </button>
         <button class="btn btn-ghost btn-block" type="button" id="acctPassword" style="margin-top:18px">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key-round"></use></svg>
           Change password
@@ -2531,6 +2798,78 @@
 
     </div>
   </aside>
+
+  <!-- ============================================================
+       ADMIN PANEL
+       Only ever opened from the account panel, and only for an account
+       listed in public.admins. Hiding it is convenience, not security:
+       every read and write it makes is refused by the database anyway.
+       ============================================================ -->
+  <section class="admin" id="adminPanel" role="dialog" aria-modal="true" aria-label="Admin panel" hidden>
+    <header class="admin-bar">
+      <div class="admin-brand">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield-check"></use></svg>
+        <strong>Admin</strong>
+        <span class="who" id="adminWho"></span>
+      </div>
+      <div class="admin-bar-actions">
+        <button class="admin-btn" type="button" id="adminRefresh">
+          <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-refresh"></use></svg>
+          Refresh
+        </button>
+        <button class="admin-btn" type="button" id="adminExport">
+          <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-download"></use></svg>
+          Export CSV
+        </button>
+        <button class="admin-btn" type="button" id="adminClose">
+          <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg>
+          Close
+        </button>
+      </div>
+    </header>
+
+    <div class="admin-stats" id="adminStats" aria-live="polite"></div>
+
+    <div class="admin-tools">
+      <input id="adminSearch" type="search" autocomplete="off" placeholder="Search name, email, reference or message" aria-label="Search requests">
+      <select id="adminStatus" aria-label="Filter by status">
+        <option value="active" selected>Active (not archived)</option>
+        <option value="all">Every status</option>
+        <option value="new">New</option>
+        <option value="read">Read</option>
+        <option value="replied">Replied</option>
+        <option value="won">Won</option>
+        <option value="archived">Archived</option>
+      </select>
+      <select id="adminUrgency" aria-label="Filter by urgency">
+        <option value="all" selected>Any urgency</option>
+        <option value="urgent">Urgent</option>
+        <option value="soon">This week</option>
+        <option value="standard">Planning ahead</option>
+      </select>
+      <select id="adminSort" aria-label="Sort order">
+        <option value="newest" selected>Newest first</option>
+        <option value="oldest">Oldest first</option>
+      </select>
+      <span class="grow"></span>
+      <button class="admin-btn" type="button" id="adminMarkShown">
+        <svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+        Mark shown as read
+      </button>
+    </div>
+
+    <div class="admin-body">
+      <div class="admin-list" id="adminList" role="listbox" aria-label="Requests"></div>
+      <div class="admin-detail" id="adminDetail">
+        <div class="admin-empty">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-inbox"></use></svg>
+          <p id="adminEmptyText">Choose a request to read it.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" id="adminFoot" style="padding:10px 18px;margin:0;border-top:1px solid var(--line);background:var(--bg-soft)"></p>
+  </section>
 
   <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
@@ -3372,6 +3711,8 @@
         if (user) {
           $("#accountHint").textContent = "Signed in as " + user.email + ". This request is saved to your account, so you can find it here later.";
         }
+
+        refreshAdminAvailability();
       }
 
       function loadMyRequests() {
@@ -3402,6 +3743,409 @@
           });
         }, function (err) {
           host.innerHTML = '<p class="hint">' + esc(err.message || "Could not load your requests.") + "</p>";
+        });
+      }
+
+      /* ============================================================
+         ADMIN PANEL
+
+         Everything below is presentation. The bridge calls it makes are
+         answered by Postgres, which is what actually decides whether this
+         account may see one request or all of them. If the panel were somehow
+         shown to a customer, the list would come back holding only their own
+         rows and every button would quietly do nothing.
+         ============================================================ */
+      var adminRows = [];
+      var adminTotal = 0;
+      var adminSelectedId = null;
+      var adminCanUse = false;
+      var adminLoading = false;
+      var adminSearchTimer = null;
+
+      const ADMIN_URGENCY = { standard: "Planning ahead", soon: "This week", urgent: "As soon as possible" };
+      const ADMIN_CONTACT = { email: "Email", whatsapp: "WhatsApp", phone: "Phone call" };
+      const ADMIN_STATUSES = ["new", "read", "replied", "won", "archived"];
+      const ADMIN_COLUMNS = [
+        "reference", "received", "status", "urgency", "service", "name", "email", "phone",
+        "preferred reply", "budget", "account", "message", "parts", "private notes"
+      ];
+
+      function adminWhen(iso) {
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return "";
+        return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) +
+          " \u00b7 " + d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+      }
+
+      function adminSetMessage(text, kind) {
+        const el = $("#adminFoot");
+        el.textContent = text || "";
+        el.style.color = kind === "error" ? "#fca5a5" : (kind === "ok" ? "#6ee7b7" : "");
+      }
+
+      function adminFilters() {
+        return {
+          search: $("#adminSearch").value,
+          status: $("#adminStatus").value,
+          urgency: $("#adminUrgency").value,
+          oldestFirst: $("#adminSort").value === "oldest",
+          limit: 200
+        };
+      }
+
+      function openAdmin() {
+        if (!adminCanUse) return;
+        if (accountOpen()) closeAccount();
+        $("#adminPanel").hidden = false;
+        $("#adminPanel").setAttribute("aria-hidden", "false");
+        $("#adminWho").textContent = accountEmail();
+        document.body.style.overflow = "hidden";
+        $("#adminRefresh").focus();
+        loadAdmin();
+      }
+
+      function closeAdmin() {
+        $("#adminPanel").hidden = true;
+        $("#adminPanel").setAttribute("aria-hidden", "true");
+        $("#adminPanel").classList.remove("is-detail");
+        document.body.style.overflow = "";
+        $("#adminOpen").focus();
+      }
+
+      function adminOpen_() {
+        return !$("#adminPanel").hidden;
+      }
+
+      function renderAdminStats(s) {
+        const cards = [
+          ["Total", s.total, false],
+          ["Unread", s.unread, true],
+          ["Urgent", s.urgent, true],
+          ["Won", s.won, false],
+          ["Last 7 days", s.last_week, false],
+          ["From accounts", s.from_accounts, false]
+        ];
+        $("#adminStats").innerHTML = cards.map(function (c) {
+          return '<div class="admin-stat' + (c[2] && Number(c[1]) > 0 ? " is-alert" : "") + '"><b>' +
+            esc(String(c[1] === null || c[1] === undefined ? "-" : c[1])) + "</b><span>" + esc(c[0]) + "</span></div>";
+        }).join("");
+      }
+
+      function renderAdminList() {
+        const host = $("#adminList");
+        if (!adminRows.length) {
+          /* An empty inbox and an over-narrow filter look identical in the DOM
+             but mean different things, so they say different things. */
+          const filterOn = adminFilters().search.trim() !== "" ||
+            $("#adminStatus").value !== "active" || $("#adminUrgency").value !== "all";
+          const message = adminLoading ? "Loading..."
+            : filterOn ? "Nothing matches these filters."
+              : "No requests yet. Anything sent through the contact form lands here.";
+          host.innerHTML = '<div class="admin-empty"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-inbox"></use></svg>' +
+            "<p>" + message + "</p></div>";
+          return;
+        }
+        host.innerHTML = "";
+        adminRows.forEach(function (r) {
+          const el = document.createElement("div");
+          el.className = "admin-item" + (r.status === "new" ? " is-unread" : "");
+          el.setAttribute("role", "option");
+          el.setAttribute("tabindex", "0");
+          el.setAttribute("aria-selected", String(r.id === adminSelectedId));
+          el.dataset.id = r.id;
+          const snip = String(r.message || "").replace(/\s+/g, " ").slice(0, 90);
+          el.innerHTML =
+            '<div class="line1"><span class="ref">' + esc(r.reference) + '</span><span class="when">' + esc(adminWhen(r.created_at)) + "</span></div>" +
+            '<div class="who">' + esc(r.name) + " \u00b7 " + esc(r.service) + "</div>" +
+            '<div class="line1"><span class="pill-status is-' + esc(r.status) + '">' + esc(r.status) + "</span>" +
+            (r.urgency === "urgent" ? '<span class="pill-status" style="border-color:rgba(248,113,113,.5);color:#fca5a5">urgent</span>' : "") +
+            (r.user_id ? '<span class="pill-status">account</span>' : "") +
+            '<span class="snip">' + esc(snip) + "</span></div>";
+          host.appendChild(el);
+        });
+      }
+
+      function adminPartsTable(parts) {
+        if (!Array.isArray(parts) || !parts.length) return "";
+        const rows = parts.map(function (p) {
+          const price = typeof p.price === "number" ? euro(p.price) : (p.price ? esc(String(p.price)) : "");
+          return "<tr><td>" + esc(p.category || "") + "</td><td>" + esc(p.name || "") + "</td><td>" + price + "</td></tr>";
+        }).join("");
+        return '<div class="admin-card"><h3>' +
+          '<svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-cpu"></use></svg>' +
+          "Attached build plan</h3><table class=\"admin-table\"><thead><tr><th>Part</th><th>Choice</th><th>Est.</th></tr></thead><tbody>" +
+          rows + "</tbody></table></div>";
+      }
+
+      function renderAdminDetail() {
+        const host = $("#adminDetail");
+        const r = adminRows.filter(function (x) { return x.id === adminSelectedId; })[0];
+        if (!r) {
+          host.innerHTML = '<div class="admin-empty"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-inbox"></use></svg><p>Choose a request to read it.</p></div>';
+          return;
+        }
+
+        const digits = String(r.phone || "").replace(/[^0-9]/g, "");
+        const contact = ADMIN_CONTACT[r.contact_by] || esc(r.contact_by || "");
+        const statusOptions = ADMIN_STATUSES.map(function (s) {
+          return '<option value="' + s + '"' + (s === r.status ? " selected" : "") + ">" + s + "</option>";
+        }).join("");
+
+        let html = '<button class="admin-btn back" type="button" id="adminBack">' +
+          '<svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>Back to list</button>';
+
+        html += '<div class="admin-card">' +
+          '<div class="admin-head"><span class="ref">' + esc(r.reference) + "</span>" +
+          '<span class="hint">' + esc(adminWhen(r.created_at)) + "</span></div>" +
+          '<div class="admin-row2"><div class="admin-field"><label for="adminStatusSet">Status</label>' +
+          '<select id="adminStatusSet">' + statusOptions + "</select></div>" +
+          '<div class="admin-field"><label>Urgency</label><div class="v" style="padding-top:10px">' +
+          '<span class="pill-status">' + esc(ADMIN_URGENCY[r.urgency] || r.urgency) + "</span>" +
+          (r.user_id ? ' <span class="pill-status">signed-in account</span>' : ' <span class="pill-status">guest</span>') +
+          "</div></div></div>" +
+          '<div class="admin-actions">' +
+          '<button class="admin-btn" type="button" id="adminCopyRef">Copy reference</button>' +
+          '<button class="admin-btn" type="button" id="adminCopyEmail">Copy email</button>' +
+          "</div></div>";
+
+        html += '<div class="admin-card"><h3>' +
+          '<svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg>' +
+          "Who is asking</h3><div class=\"admin-pairs\">" +
+          '<div><div class="k">Name</div><div class="v">' + esc(r.name) + "</div></div>" +
+          '<div><div class="k">Email</div><div class="v"><a href="mailto:' + esc(r.email) + '">' + esc(r.email) + "</a></div></div>" +
+          '<div><div class="k">Phone</div><div class="v">' +
+            (digits
+              ? '<a href="tel:' + esc(r.phone) + '">' + esc(r.phone) + "</a> \u00b7 " +
+                '<a href="https://wa.me/' + esc(digits) + '" target="_blank" rel="noopener noreferrer">WhatsApp</a>'
+              : "<span style=\"color:var(--muted)\">not given</span>") +
+          "</div></div>" +
+          '<div><div class="k">Preferred reply</div><div class="v">' + contact + "</div></div>" +
+          '<div><div class="k">Service</div><div class="v">' + esc(r.service) + "</div></div>" +
+          '<div><div class="k">Budget</div><div class="v">' + (r.budget ? esc(r.budget) : "<span style=\"color:var(--muted)\">not given</span>") + "</div></div>" +
+          "</div></div>";
+
+        html += '<div class="admin-card"><h3>' +
+          '<svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-message-circle"></use></svg>' +
+          "What they asked for</h3><div class=\"admin-message\">" + esc(r.message || "") + "</div>" +
+          (r.build_summary ? '<p class="hint" style="margin-top:10px">Build summary: ' + esc(r.build_summary) + "</p>" : "") +
+          "</div>";
+
+        html += adminPartsTable(r.parts);
+
+        html += '<div class="admin-card"><h3>' +
+          '<svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-clipboard-list"></use></svg>' +
+          "Private notes</h3><div class=\"admin-field\"><textarea id=\"adminNotes\" placeholder=\"Only you can see this.\">" +
+          esc(r.notes || "") + "</textarea></div>" +
+          '<div class="admin-actions">' +
+          '<button class="admin-btn" type="button" id="adminSaveNote">Save note</button>' +
+          '<button class="admin-btn is-danger" type="button" id="adminDelete">' +
+          '<svg class="icon icon-sm" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>Delete request</button>' +
+          "</div>" +
+          '<p class="admin-msg" id="adminDetailMsg" hidden></p></div>';
+
+        host.innerHTML = html;
+
+        $("#adminBack").addEventListener("click", function () { $("#adminPanel").classList.remove("is-detail"); });
+        $("#adminCopyRef").addEventListener("click", function () { copyText(r.reference, "Reference"); });
+        $("#adminCopyEmail").addEventListener("click", function () { copyText(r.email, "Email"); });
+        $("#adminStatusSet").addEventListener("change", function (e) { adminSetStatus(r.id, e.target.value); });
+        $("#adminSaveNote").addEventListener("click", function () { adminSaveNote(r.id); });
+        $("#adminDelete").addEventListener("click", function () { adminDeleteRow(r.id, r.reference); });
+      }
+
+      function adminDetailMessage(text, kind) {
+        const el = $("#adminDetailMsg");
+        if (!el) return;
+        el.textContent = text || "";
+        el.hidden = !text;
+        el.className = "admin-msg" + (kind ? " is-" + kind : "");
+      }
+
+      function adminSelect(id) {
+        adminSelectedId = id;
+        $("#adminPanel").classList.add("is-detail");
+        renderAdminList();
+        renderAdminDetail();
+        $("#adminDetail").scrollTop = 0;
+      }
+
+      function adminSetStatus(id, status) {
+        adminSetMessage("Saving...", "");
+        AUTH.adminUpdate(id, { status: status }).then(function (saved) {
+          const row = adminRows.filter(function (x) { return x.id === id; })[0];
+          if (row) row.status = saved.status;
+          adminSetMessage("Saved - " + saved.status + ".", "ok");
+          renderAdminList();
+          renderAdminDetail();
+          loadAdminStats();
+        }, function (err) {
+          adminSetMessage(err.message || "Could not change the status.", "error");
+        });
+      }
+
+      function adminSaveNote(id) {
+        const notes = $("#adminNotes").value;
+        adminDetailMessage("Saving...", "");
+        AUTH.adminUpdate(id, { notes: notes }).then(function (saved) {
+          const row = adminRows.filter(function (x) { return x.id === id; })[0];
+          if (row) row.notes = saved.notes;
+          adminDetailMessage("Note saved.", "ok");
+        }, function (err) {
+          adminDetailMessage(err.message || "Could not save the note.", "error");
+        });
+      }
+
+      function adminDeleteRow(id, reference) {
+        if (!window.confirm("Delete " + reference + " permanently? This cannot be undone.")) return;
+        adminDetailMessage("Deleting...", "");
+        AUTH.adminDelete(id).then(function (removed) {
+          if (!removed) {
+            adminDetailMessage("The database did not delete it. It may already be gone.", "error");
+            return;
+          }
+          toast(reference + " deleted", "ok");
+          if (adminSelectedId === id) adminSelectedId = null;
+          $("#adminPanel").classList.remove("is-detail");
+          loadAdmin();
+        }, function (err) {
+          adminDetailMessage(err.message || "Could not delete it.", "error");
+        });
+      }
+
+      function loadAdminStats() {
+        return AUTH.adminStats().then(renderAdminStats, function () { /* the list still matters more */ });
+      }
+
+      function reloadAdminList() {
+        adminLoading = true;
+        renderAdminList();
+        return AUTH.adminList(adminFilters()).then(function (result) {
+          adminLoading = false;
+          adminRows = result.rows;
+          adminTotal = result.total;
+          if (adminSelectedId && !adminRows.some(function (r) { return r.id === adminSelectedId; })) adminSelectedId = null;
+          renderAdminList();
+          renderAdminDetail();
+          adminSetMessage("Showing " + adminRows.length + " of " + adminTotal + " \u00b7 refreshed " +
+            new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }), "");
+        }, function (err) {
+          adminLoading = false;
+          adminRows = [];
+          renderAdminList();
+          adminSetMessage(err.message || "Could not load requests.", "error");
+        });
+      }
+
+      function loadAdmin() {
+        return Promise.all([loadAdminStats(), reloadAdminList()]);
+      }
+
+      /* Deliberately hand-rolled: one dependency-free file, and a CSV is small. */
+      function csvCell(value) {
+        let text = value === null || value === undefined ? "" : String(value);
+        /* A spreadsheet evaluates a cell beginning with = @ or a control
+           character, so those get a leading apostrophe. + and - are trickier:
+           they open a formula too, but every phone number this form stores
+           begins with +. So + and - are only neutralised when what follows is
+           not plainly a number - which keeps +34644555666 intact while still
+           defusing a payload such as +cmd|'/C calc'!A0. */
+        const looksNumeric = /^[+\-][0-9+()\s.\-]{2,}$/.test(text);
+        if (/^[=@\t\r\n]/.test(text) || (/^[+\-]/.test(text) && !looksNumeric)) {
+          text = "'" + text;
+        }
+        return '"' + text.replace(/"/g, '""') + '"';
+      }
+
+      function adminExportCsv() {
+        adminSetMessage("Preparing the export...", "");
+        const opts = adminFilters();
+        opts.limit = 1000;
+        AUTH.adminList(opts).then(function (result) {
+          const rows = result.rows;
+          if (!rows.length) { adminSetMessage("There is nothing to export with these filters.", "error"); return; }
+          const lines = [ADMIN_COLUMNS.map(csvCell).join(",")];
+          rows.forEach(function (r) {
+            const parts = Array.isArray(r.parts)
+              ? r.parts.map(function (p) { return (p.category || "") + ": " + (p.name || "") + (typeof p.price === "number" ? " (" + p.price + ")" : ""); }).join("; ")
+              : "";
+            lines.push([
+              r.reference, r.created_at, r.status, r.urgency, r.service, r.name, r.email, r.phone,
+              ADMIN_CONTACT[r.contact_by] || r.contact_by, r.budget, r.user_id ? "yes" : "no",
+              r.message, parts, r.notes
+            ].map(csvCell).join(","));
+          });
+          const blob = new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "gamefix-requests-" + new Date().toISOString().slice(0, 10) + ".csv";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+          adminSetMessage("Exported " + rows.length + (result.total > rows.length ? " of " + result.total : "") + " requests.", "ok");
+        }, function (err) {
+          adminSetMessage(err.message || "Could not prepare the export.", "error");
+        });
+      }
+
+      function adminMarkShownRead() {
+        const ids = adminRows.filter(function (r) { return r.status === "new"; }).map(function (r) { return r.id; });
+        if (!ids.length) { adminSetMessage("Every request shown is already marked read.", "error"); return; }
+        adminSetMessage("Marking " + ids.length + " as read...", "");
+        AUTH.adminMarkRead(ids).then(function (n) {
+          toast(n + " marked as read", "ok");
+          loadAdmin();
+        }, function (err) {
+          adminSetMessage(err.message || "Could not mark them as read.", "error");
+        });
+      }
+
+      function initAdmin() {
+        $("#adminClose").addEventListener("click", closeAdmin);
+        $("#adminRefresh").addEventListener("click", function () { loadAdmin(); });
+        $("#adminExport").addEventListener("click", adminExportCsv);
+        $("#adminMarkShown").addEventListener("click", adminMarkShownRead);
+        $("#adminOpen").addEventListener("click", openAdmin);
+
+        $("#adminStatus").addEventListener("change", reloadAdminList);
+        $("#adminUrgency").addEventListener("change", reloadAdminList);
+        $("#adminSort").addEventListener("change", reloadAdminList);
+        $("#adminSearch").addEventListener("input", function () {
+          clearTimeout(adminSearchTimer);
+          adminSearchTimer = setTimeout(reloadAdminList, 350);
+        });
+
+        /* Delegated, so re-rendering the list never leaves a dead row behind. */
+        $("#adminList").addEventListener("click", function (e) {
+          const item = e.target.closest(".admin-item");
+          if (item) adminSelect(item.dataset.id);
+        });
+        $("#adminList").addEventListener("keydown", function (e) {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          const item = e.target.closest(".admin-item");
+          if (item) { e.preventDefault(); adminSelect(item.dataset.id); }
+        });
+      }
+
+      /* The panel is offered only when the database says this account is an
+         admin. A failure here hides the button rather than showing a broken one. */
+      function refreshAdminAvailability() {
+        const button = $("#adminOpen");
+        if (!AUTH || !AUTH.available || !authSession) {
+          adminCanUse = false;
+          button.hidden = true;
+          if (adminOpen_()) closeAdmin();
+          return;
+        }
+        if (button.dataset.checked === authSession.user.id) return;
+        AUTH.amIAdmin().then(function (yes) {
+          adminCanUse = yes === true;
+          button.hidden = !adminCanUse;
+          button.dataset.checked = authSession ? authSession.user.id : "";
+        }, function () {
+          adminCanUse = false;
+          button.hidden = true;
         });
       }
 
@@ -3572,6 +4316,7 @@
         });
 
         document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && adminOpen_()) { closeAdmin(); return; }
           if (e.key === "Escape" && accountOpen()) closeAccount();
         });
       }
@@ -4139,6 +4884,7 @@
 
         /* first paint */
         initAccount();
+        initAdmin();
         loadLedger();
         const linkedPlan = applyPlanFromUrl();
         runConfigurator(true);
@@ -4328,6 +5074,106 @@
         .limit(20);
       if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
       return res.data || [];
+    };
+
+    /* ====================================================== admin ========
+       Every call below is answered by Postgres, not by this file. The panel
+       only decides what to draw; who may read, edit or delete a request is
+       settled by row level security. A customer who calls these by hand gets
+       their own rows back and nothing else.
+       ===================================================================== */
+
+    /* Search runs through PostgREST's filter grammar, where % , ( ) and _ carry
+       meaning. Strip them so a search for "a,b" cannot become a filter. */
+    function adminTerm(q) {
+      return String(q || "").replace(/[%,()*_"'\\]/g, " ").replace(/\s+/g, " ").trim().slice(0, 60);
+    }
+
+    bridge.amIAdmin = async function () {
+      const client = await authed();
+      const res = await client.rpc("is_admin");
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return res.data === true;
+    };
+
+    bridge.adminStats = async function () {
+      const client = await authed();
+      const res = await client
+        .from("enquiry_stats")
+        .select("total,unread,urgent,won,last_week,from_accounts")
+        .single();
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return res.data;
+    };
+
+    bridge.adminList = async function (opts) {
+      opts = opts || {};
+      const client = await authed();
+      let query = client
+        .from("enquiries")
+        .select(
+          "id,reference,created_at,user_id,name,email,phone,service,budget,urgency,contact_by,message,build_summary,parts,status,notes",
+          { count: "exact" }
+        );
+
+      const status = opts.status || "active";
+      if (status === "active") query = query.neq("status", "archived");
+      else if (status !== "all") query = query.eq("status", status);
+
+      if (opts.urgency && opts.urgency !== "all") query = query.eq("urgency", opts.urgency);
+      if (opts.service && opts.service !== "all") query = query.eq("service", opts.service);
+
+      const term = adminTerm(opts.search);
+      if (term) {
+        const like = "%" + term + "%";
+        query = query.or(
+          ["reference", "name", "email", "message"].map(function (f) { return f + ".ilike." + like; }).join(",")
+        );
+      }
+
+      query = query
+        .order("created_at", { ascending: opts.oldestFirst === true })
+        .limit(Math.max(1, Math.min(opts.limit || 200, 1000)));
+
+      const res = await query;
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      const rows = res.data || [];
+      return { rows: rows, total: typeof res.count === "number" ? res.count : rows.length };
+    };
+
+    /* Only status and notes: the database grants no other column to a browser. */
+    bridge.adminUpdate = async function (id, patch) {
+      const client = await authed();
+      const res = await client
+        .from("enquiries")
+        .update(patch)
+        .eq("id", id)
+        .select("id,status,notes")
+        .single();
+      /* No rows come back when the row is gone, or when the database declined -
+         which is what a null result means for a write the caller may not make. */
+      if (res.error && /coerce|0 rows|multiple \(or no\)|PGRST116/i.test(String(res.error.message) + " " + String(res.error.code))) {
+        throw Object.assign(new Error("That request could not be updated. It may have been deleted, or you may no longer have access."), { status: 400, detail: res.error });
+      }
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return res.data;
+    };
+
+    bridge.adminMarkRead = async function (ids) {
+      if (!ids || !ids.length) return 0;
+      const client = await authed();
+      const res = await client.from("enquiries").update({ status: "read" }).in("id", ids).eq("status", "new").select("id");
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return (res.data || []).length;
+    };
+
+    /* Returns how many rows were actually removed - zero means the database
+       refused, which is also how a request that is already gone answers. */
+    bridge.adminDelete = async function (id) {
+      const client = await authed();
+      const res = await client.from("enquiries").delete().eq("id", id).select("id");
+      if (res.error) throw Object.assign(new Error(friendly(res.error)), { status: 400, detail: res.error });
+      return (res.data || []).length;
     };
 
     window.gfhAuth = bridge;

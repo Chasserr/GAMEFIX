@@ -4,7 +4,8 @@
   "type": "module",
   "description": "Database migrations and the live account verification suite.",
   "scripts": {
-    "verify": "node verify-auth.mjs"
+    "verify": "node verify-auth.mjs",
+    "verify:admin": "node verify-admin.mjs"
   },
   "devDependencies": {
     "pg": "^8.13.1"
