@@ -21,6 +21,49 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 
+  <!-- ---------------------------------------------------------- errors --
+       Reports JavaScript errors from real visitors' browsers, which no
+       uptime check can see.
+
+       Nothing is loaded and nothing is sent while SENTRY_DSN is empty, so
+       the site behaves exactly as it would without this block. To switch it
+       on: create a free project at sentry.io, then Settings -> Projects ->
+       your project -> Client Keys and paste the DSN below.
+
+       A DSN is a public key - it can submit events to the project, not read
+       them - so it is safe in page source. It is the only thing to change.
+       ------------------------------------------------------------------- -->
+  <script>
+    window.gfhSentryDsn = "";
+
+    (function () {
+      /* The DSN is https://<public key>@<org>.ingest.sentry.io/<project>,
+         and that public key is exactly what the loader script URL needs. */
+      var match = /^https:\/\/([^@]+)@/.exec(window.gfhSentryDsn || "");
+      if (!match) return;
+
+      /* This site takes names, emails and phone numbers, so opt out of the
+         identity data the SDK would otherwise collect by default. */
+      window.sentryOnLoad = function () {
+        window.Sentry.init({
+          tracesSampleRate: 0,
+          dataCollection: {
+            userInfo: false,
+            httpBodies: [],
+            cookies: false,
+            httpHeaders: false,
+            urlQueryParams: false,
+          },
+        });
+      };
+
+      var loader = document.createElement("script");
+      loader.src = "https://js.sentry-cdn.com/" + match[1] + ".min.js";
+      loader.crossOrigin = "anonymous";
+      document.head.appendChild(loader);
+    })();
+  </script>
+
   <!-- EDIT: update the URL and area served once the site has a real domain -->
   <script type="application/ld+json">
   {

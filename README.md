@@ -171,6 +171,60 @@ Push to `main` and `.github/workflows/pages.yml` publishes `index.html` to
 GitHub Pages. Turn it on once under **Settings → Pages → Source: GitHub
 Actions**, then add the resulting URL to the Supabase redirect list (step 3).
 
+## Monitoring
+
+Nothing watched the site, so a failure would have been noticed by a customer
+first. Three layers cover different failures.
+
+### 1. The built-in check - already on
+
+`.github/workflows/monitor.yml` runs every 30 minutes and checks the published
+page, the Supabase auth endpoint, and a read-only database call. It re-reads the
+publishable key out of `index.html` and uses that exact key, so a rotated or
+mistyped key is caught here rather than by a customer.
+
+A failure opens an issue labelled `monitor-alert`, which GitHub emails to you.
+When everything passes again the issue is closed, so **the open or closed state
+of that issue is the current health of the site**. Run it by hand from
+**Actions → Monitor site and backend → Run workflow**.
+
+Two limits worth knowing:
+
+- It runs on GitHub, so it cannot tell you that GitHub itself is unreachable.
+- GitHub disables a scheduled workflow after 60 days with no push to the
+  repository. It emails you when it does; press **Enable workflow** on the
+  Actions tab to bring it back.
+
+### 2. An outside check - recommended, about five minutes
+
+Because the check above lives on GitHub, add one that lives somewhere else.
+[UptimeRobot](https://uptimerobot.com) has a free tier of 50 monitors on
+5-minute checks with email alerts:
+
+| Monitor | Type | URL |
+| --- | --- | --- |
+| GameFix Hub | HTTP(s) | `https://chasserr.github.io/GAMEFIX/` |
+| GameFix Hub API | HTTP(s) | `https://mggokcssqghstlypdoub.supabase.co/auth/v1/settings` |
+
+For the second, add a custom request header `apikey` holding the publishable key
+from `index.html`. Without it Supabase answers `401`, which would look like an
+outage.
+
+### 3. Browser errors - inert until you add a DSN
+
+Neither check above can see a feature that silently breaks for some visitors.
+The `errors` block near the top of `index.html` reports JavaScript errors from
+real browsers, and does nothing at all until it is given a DSN: while the value
+is empty, no script is loaded and nothing is sent.
+
+To switch it on, create a free project at [sentry.io](https://sentry.io), then
+**Settings → Projects → your project → Client Keys**, and paste the DSN into
+`window.gfhSentryDsn` at the top of that block. That is the only change needed.
+
+A DSN is a public key - it can submit events to your project, not read them - so
+it is safe in page source. The block opts out of the identity data the SDK
+collects by default, because this site handles names, emails and phone numbers.
+
 ## Tests
 
 Verification here runs against the live project rather than mocks.
