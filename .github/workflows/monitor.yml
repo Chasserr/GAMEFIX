@@ -1,0 +1,137 @@
+name: Monitor site and backend
+
+# Checks that the live site and the Supabase backend it depends on are actually
+# working - not merely that a deploy reported success.
+#
+# A failing run opens an issue labelled `monitor-alert`, which GitHub emails to
+# the repository owner. When everything passes again the issue is closed, so
+# the open/closed state of that issue is the current health of the site.
+#
+# Two things worth knowing:
+#   * GitHub delays scheduled runs at busy times, so treat this as "within the
+#     hour", not to the minute.
+#   * GitHub disables a scheduled workflow after 60 days with no push to the
+#     repository. The README says how to bring it back.
+#
+# This is deliberately independent of the page's own code: it re-reads the
+# publishable key out of index.html and uses that exact key, so a rotated or
+# mistyped key is caught here rather than by a customer.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SITE_URL: https://chasserr.github.io/GAMEFIX/
+      SUPABASE_URL: https://mggokcssqghstlypdoub.supabase.co
+      ALERT_LABEL: monitor-alert
+      ALERT_TITLE: Site or Supabase backend is DOWN
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the live site and the backend it uses
+        run: |
+          set -uo pipefail
+          report="$RUNNER_TEMP/report.md"
+          : > "$report"
+          failed=0
+
+          pass() { echo "PASS: $1"; printf -- '- PASS %s\n' "$1" >> "$report"; }
+          fail() {
+            echo "FAIL: $1"
+            failed=1
+            { printf -- '- FAIL %s\n\n' "$1"; printf '```\n%s\n```\n' "$2"; } >> "$report"
+          }
+
+          # The key the site actually ships, so the monitor tests the real thing.
+          key="$(grep -oE 'sb_publishable_[A-Za-z0-9_]+' index.html | head -1 || true)"
+          if [ -n "$key" ]; then
+            pass "publishable key is present in index.html"
+          else
+            fail "publishable key is present in index.html" "no sb_publishable_ value found in index.html"
+            key="none"
+          fi
+
+          # Matching is done with [[ ... ]], never `... | grep -q`. Under
+          # `pipefail` a successful `grep -q` exits early, the writer takes
+          # SIGPIPE, and the pipeline reports failure even though it matched -
+          # which produced a false alarm on the full page but not on small JSON.
+
+          # 1. The page itself, with content only the real site has. A deploy
+          #    that publishes an error page fails here.
+          if body="$(curl -fsS -m 20 "$SITE_URL" 2>&1)" && [[ "$body" == *"GameFix Hub"* ]]; then
+            pass "live site serves the real page"
+          else
+            fail "live site serves the real page" "$(printf '%s' "${body:-no response}" | head -c 400)"
+          fi
+
+          # 2. Supabase auth: proves the project is awake and the key is valid.
+          if body="$(curl -fsS -m 20 -H "apikey: $key" "$SUPABASE_URL/auth/v1/settings" 2>&1)" \
+             && [[ "$body" == *'"disable_signup"'* ]]; then
+            pass "Supabase auth responds and accepts the key"
+          else
+            fail "Supabase auth responds and accepts the key" "$(printf '%s' "${body:-no response}" | head -c 400)"
+          fi
+
+          # 3. Supabase database, through a function that only reads. An
+          #    anonymous caller always gets false, so the answer is stable and
+          #    nothing is written.
+          if body="$(curl -fsS -m 20 -X POST -H "apikey: $key" -H 'Content-Type: application/json' \
+                     "$SUPABASE_URL/rest/v1/rpc/is_admin" -d '{}' 2>&1)" \
+             && [ "$body" = "false" ]; then
+            pass "Supabase database answers a read"
+          else
+            fail "Supabase database answers a read" "expected false, got: $(printf '%s' "${body:-no response}" | head -c 400)"
+          fi
+
+          exit "$failed"
+
+      - name: Open or update the alert issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh label create "$ALERT_LABEL" --color B60205 \
+            --description "Uptime monitor alert" 2>/dev/null || true
+          number="$(gh issue list --state open --label "$ALERT_LABEL" --limit 1 \
+                     --json number --jq '.[0].number // empty' 2>/dev/null || true)"
+          run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          {
+            cat "$RUNNER_TEMP/report.md"
+            echo
+            echo "Checked at $(date -u '+%Y-%m-%d %H:%M UTC')."
+            echo "Run: $run_url"
+          } > "$RUNNER_TEMP/body.md"
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body-file "$RUNNER_TEMP/body.md"
+          else
+            gh issue create --title "$ALERT_TITLE" --label "$ALERT_LABEL" \
+              --body-file "$RUNNER_TEMP/body.md"
+          fi
+
+      - name: Close the alert issue once everything is healthy
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          number="$(gh issue list --state open --label "$ALERT_LABEL" --limit 1 \
+                     --json number --jq '.[0].number // empty' 2>/dev/null || true)"
+          if [ -n "$number" ]; then
+            gh issue close "$number" \
+              --comment "All checks passed again at $(date -u '+%Y-%m-%d %H:%M UTC')."
+          fi
